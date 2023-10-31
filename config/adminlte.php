@@ -433,7 +433,7 @@ return [
                 ],
                 [
                     'text' => 'Clients',
-                    'url'  => '#',
+                    'url'  => '/clients',
                     'icon' => 'fas fa-minus',
                 ],
                 [
