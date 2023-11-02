@@ -23,8 +23,13 @@ class ClientController extends Controller
         try {
             DB::beginTransaction();
             $validatedData = $request->validated();
+            // Get the last used client code from the database
+            $lastClient = Client::orderBy('id_client', 'desc')->first();
+
+            // Generate the new client code by incrementing the last one
+            $newCode = ($lastClient) ? ++$lastClient->code_client : 'C001';
             $client = Client::create([
-                'code_client' => 'test',
+                'code_client' => $newCode,
                 'name_client' => $validatedData['client_name'],
                 'adresse' => $validatedData['address'],
                 'id_city' => $validatedData['city_id'],

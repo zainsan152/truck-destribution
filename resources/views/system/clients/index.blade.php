@@ -2,6 +2,21 @@
 @section('title', 'Clients')
 @section('plugins.Datatables', true)
 @section('plugins.Sweetalert2', true);
+<style>
+    .edit-client-button {
+        color: dodgerblue;
+        cursor: pointer;
+    }
+
+    .delete-client-button {
+        color: red;
+        cursor: pointer;
+    }
+
+    .client-row td{
+        text-align: center;
+    }
+</style>
 @section('content')
     <div class="container">
         <div class="row pt-5">
@@ -9,7 +24,9 @@
                 <div class="card">
                     <div class="card-header" style="display: flex; align-items: center;">
                         <h3 class="card-title">Liste des clients</h3>
-                        <button type="button" class="btn btn-primary" id="openModalBtn" style="margin-left: auto;">Add Client</button>
+                        <button type="button" class="btn btn-primary" id="openModalBtn" style="margin-left: auto;">Add
+                            Client
+                        </button>
                     </div>
                     <div class="card-body">
                         <table id="clients-table" class="table table-bordered">
@@ -25,21 +42,21 @@
                             </thead>
                             <tbody>
                             @foreach($clients as $client)
-                                <tr id="clientRow-{{$client->id_client}}">
+                                <tr id="clientRow-{{$client->id_client}}" class="client-row">
                                     <td>{{$client->code_client}}</td>
                                     <td>{{$client->name_client}}</td>
                                     <td>{{$client->adresse}}</td>
                                     <td>{{$client->city->city}}</td>
-                                    <td style="text-align: center;">
+                                    <td>
                                         <i class="fas fa-edit edit-client-button"
                                            data-client-id="{{ $client->id_client }}"
                                            data-client-name="{{ $client->name }}"
                                            data-city-id="{{ $client->city_id }}"
-                                           data-client-address="{{ $client->address }}" style="color: dodgerblue;"></i>
+                                           data-client-address="{{ $client->address }}"></i>
                                     </td>
-                                    <td style="text-align: center;">
+                                    <td>
                                         <i class="fas fa-trash-alt delete-client-button"
-                                           data-client-id="{{ $client->id_client }}" style="color: red;"></i>
+                                           data-client-id="{{ $client->id_client }}"></i>
                                     </td>
                                 </tr>
                             @endforeach
@@ -94,7 +111,9 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="float: right;" id="clientActionButton">Submit</button>
+                        <button type="submit" class="btn btn-primary" style="float: right;" id="clientActionButton">
+                            Submit
+                        </button>
                     </form>
 
                 </div>
@@ -161,9 +180,10 @@
         $('#clientForm').submit(function (event) {
             event.preventDefault();
             var formData = $(this).serialize();
+            var client_id = $('#client_id').val();
             $.ajax({
                 type: 'POST',
-                url: $('#client_id').val() ? '{{ route('client.update') }}' : '{{ route('client.store') }}',
+                url: client_id ? '{{ route('client.update') }}' : '{{ route('client.store') }}',
                 data: formData,
                 success: function (data) {
                     // Handle the success response here
@@ -174,9 +194,9 @@
                     );
                     $('#clientModal').modal('hide'); // Hide the modal after add/update
 
-                    if ($('#client_id').val()) {
+                    if (client_id) {
                         // Update the existing row if client ID exists
-                        var row = table.row('#clientRow-' + $('#client_id').val()).data([
+                        var row = table.row('#clientRow-' + client_id).data([
                             data.client.code_client,
                             data.client.name_client,
                             data.client.adresse,
@@ -186,14 +206,18 @@
                         ]).draw();
                     } else {
                         // Add a new row if client ID does not exist
-                        table.row.add([
+                        var newRow = table.row.add([
                             data.client.code_client,
                             data.client.name_client,
                             data.client.adresse,
                             data.client.city.city,
                             '<i class="fas fa-edit edit-client-button" data-client-id="' + data.client.id_client + '" data-client-name="' + data.client.name_client + '" data-city-id="' + data.client.id_city + '" data-client-address="' + data.client.adresse + '"></i>',
                             '<i class="fas fa-trash-alt delete-client-button" data-client-id="' + data.client.id_client + '"></i>'
-                        ]).draw();
+                        ]).draw().node();
+
+                        // Assign the ID to the new row
+                        $(newRow).attr('id', 'clientRow-' + data.client.id_client);
+                        $(newRow).find('td').css('text-align', 'center');
                     }
                 },
                 error: function (xhr, status, error) {
@@ -203,7 +227,7 @@
         });
 
         // Handle the click event for the delete icon
-        $('.delete-client-button').click(function () {
+        $(document).on('click', '.delete-client-button', function () {
             var clientId = $(this).data('client-id');
 
             // Confirm the deletion with the user (optional)
@@ -216,7 +240,6 @@
                 confirmButtonText: 'Yes, delete it!',
                 cancelButtonText: 'No, cancel',
             }).then((result) => {
-                console.log(result)
                 if (result.value) {
                     $.ajax({
                         type: 'DELETE',
@@ -229,6 +252,8 @@
                                 data.message,
                                 'success'
                             );
+                            // Remove the row from table
+                            table.row('#clientRow-' + clientId).remove().draw();
                         },
                         error: function (xhr, status, error) {
                             console.log(xhr.responseText);
@@ -238,6 +263,5 @@
                 }
             })
         });
-
     </script>
 @endsection
