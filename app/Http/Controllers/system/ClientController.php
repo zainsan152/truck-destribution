@@ -23,14 +23,15 @@ class ClientController extends Controller
         try {
             DB::beginTransaction();
             $validatedData = $request->validated();
-            Client::create([
+            $client = Client::create([
                 'code_client' => 'test',
                 'name_client' => $validatedData['client_name'],
                 'adresse' => $validatedData['address'],
                 'id_city' => $validatedData['city_id'],
             ]);
+            $client->load('city');
             DB::commit();
-            return response()->json(['message' => 'Client added successfully']);
+            return response()->json(['message' => 'Client added successfully', 'client' => $client]);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()]);
@@ -64,8 +65,10 @@ class ClientController extends Controller
 
             $client->save(); // Save the changes to the database
 
+            $client->load('city');
+
             DB::commit();
-            return response()->json(['message' => 'Client updated successfully']);
+            return response()->json(['message' => 'Client updated successfully', 'client' => $client]);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()]);

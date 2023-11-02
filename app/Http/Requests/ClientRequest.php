@@ -23,7 +23,7 @@ class ClientRequest extends FormRequest
     {
         return [
             'client_name' => 'required|string|min:5',
-            'address' => 'required|string|min:5',
+            'address' => 'nullable|string|min:5',
             'city_id' => 'required|integer',
         ];
     }

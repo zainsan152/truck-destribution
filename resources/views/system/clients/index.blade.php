@@ -7,10 +7,9 @@
         <div class="row pt-5">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header" style="display: flex; align-items: center;">
                         <h3 class="card-title">Liste des clients</h3>
-                        <button type="button" class="btn btn-primary" id="openModalBtn">Add Client</button>
-
+                        <button type="button" class="btn btn-primary" id="openModalBtn" style="margin-left: auto;">Add Client</button>
                     </div>
                     <div class="card-body">
                         <table id="clients-table" class="table table-bordered">
@@ -26,21 +25,21 @@
                             </thead>
                             <tbody>
                             @foreach($clients as $client)
-                                <tr>
+                                <tr id="clientRow-{{$client->id_client}}">
                                     <td>{{$client->code_client}}</td>
                                     <td>{{$client->name_client}}</td>
                                     <td>{{$client->adresse}}</td>
                                     <td>{{$client->city->city}}</td>
-                                    <td>
+                                    <td style="text-align: center;">
                                         <i class="fas fa-edit edit-client-button"
                                            data-client-id="{{ $client->id_client }}"
                                            data-client-name="{{ $client->name }}"
                                            data-city-id="{{ $client->city_id }}"
-                                           data-client-address="{{ $client->address }}"></i>
+                                           data-client-address="{{ $client->address }}" style="color: dodgerblue;"></i>
                                     </td>
-                                    <td>
+                                    <td style="text-align: center;">
                                         <i class="fas fa-trash-alt delete-client-button"
-                                           data-client-id="{{ $client->id_client }}"></i>
+                                           data-client-id="{{ $client->id_client }}" style="color: red;"></i>
                                     </td>
                                 </tr>
                             @endforeach
@@ -53,8 +52,8 @@
     </div>
 
     <!-- Modal for adding and updating client -->
-    <div class="modal" id="clientModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="clientModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="clientModalTitle">Add Client</h5>
@@ -67,25 +66,37 @@
                         @csrf
                         <!-- Add a hidden field to store client ID for updates -->
                         <input type="hidden" name="client_id" id="client_id" value="">
-                        <div class="form-group">
-                            <label for="name">Nom Client:</label>
-                            <input type="text" name="client_name" class="form-control" id="client_name" required>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Nom Client *</label>
+                                    <input type="text" name="client_name" class="form-control" id="client_name"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="city_id">Ville *</label>
+                                    <select name="city_id" id="city_id" class="form-control" required>
+                                        <option value="">Select value</option>
+                                        @foreach($cities as $city)
+                                            <option value="{{$city->id_city}}">{{$city->city}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="city_id">Ville:</label>
-                            <select name="city_id" id="city_id" class="form-control" required>
-                                <option value="">Select value</option>
-                                @foreach($cities as $city)
-                                    <option value="{{$city->id_city}}">{{$city->city}}</option>
-                                @endforeach
-                            </select>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="address">Adresse</label>
+                                    <textarea name="address" class="form-control" id="address"></textarea>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="address">Adresse:</label>
-                            <textarea name="address" class="form-control" id="address" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="clientActionButton">Submit</button>
+                        <button type="submit" class="btn btn-primary" style="float: right;" id="clientActionButton">Submit</button>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -94,7 +105,7 @@
 @endsection
 @section('js')
     <script>
-        $('#clients-table').DataTable();
+        var table = $('#clients-table').DataTable();
         // Get the CSRF token value from the meta tag in your HTML
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
@@ -138,7 +149,7 @@
                 url: '{{ route('client.get') }}', // Use the route() helper to generate the URL
                 data: {id: clientId}, // Pass the client ID as a parameter
                 success: function (data) {
-                    openClientModal('Edit', data) // Open the modal with client data
+                    openClientModal('Update', data) // Open the modal with client data
                 },
                 error: function (xhr, status, error) {
                     console.log(xhr.responseText);
@@ -150,7 +161,6 @@
         $('#clientForm').submit(function (event) {
             event.preventDefault();
             var formData = $(this).serialize();
-
             $.ajax({
                 type: 'POST',
                 url: $('#client_id').val() ? '{{ route('client.update') }}' : '{{ route('client.store') }}',
@@ -158,11 +168,33 @@
                 success: function (data) {
                     // Handle the success response here
                     Swal.fire(
-                        'Good job!',
-                       data.message,
+                        false,
+                        data.message,
                         'success'
                     );
                     $('#clientModal').modal('hide'); // Hide the modal after add/update
+
+                    if ($('#client_id').val()) {
+                        // Update the existing row if client ID exists
+                        var row = table.row('#clientRow-' + $('#client_id').val()).data([
+                            data.client.code_client,
+                            data.client.name_client,
+                            data.client.adresse,
+                            data.client.city.city,
+                            '<i class="fas fa-edit edit-client-button" data-client-id="' + data.client.id_client + '" data-client-name="' + data.client.name_client + '" data-city-id="' + data.client.id_city + '" data-client-address="' + data.client.adresse + '"></i>',
+                            '<i class="fas fa-trash-alt delete-client-button" data-client-id="' + data.client.id_client + '"></i>'
+                        ]).draw();
+                    } else {
+                        // Add a new row if client ID does not exist
+                        table.row.add([
+                            data.client.code_client,
+                            data.client.name_client,
+                            data.client.adresse,
+                            data.client.city.city,
+                            '<i class="fas fa-edit edit-client-button" data-client-id="' + data.client.id_client + '" data-client-name="' + data.client.name_client + '" data-city-id="' + data.client.id_city + '" data-client-address="' + data.client.adresse + '"></i>',
+                            '<i class="fas fa-trash-alt delete-client-button" data-client-id="' + data.client.id_client + '"></i>'
+                        ]).draw();
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.log(xhr.responseText);
@@ -175,36 +207,37 @@
             var clientId = $(this).data('client-id');
 
             // Confirm the deletion with the user (optional)
-                // Send a DELETE request to delete the client
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'You won\'t be able to revert this!',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'No, cancel',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            type: 'DELETE',
-                            url: '{{ route('client.destroy') }}', // Use the correct route URL
-                            data: {id: clientId}, // Pass the client ID as a parameter
-                            success: function (data) {
-                                // Handle the success response here
-                                Swal.fire(
-                                    'Good job!',
-                                    data.message,
-                                    'success'
-                                );
-                                // You can also update the UI or remove the client row if needed
-                            },
-                            error: function (xhr, status, error) {
-                                console.log(xhr.responseText);
-                                // Handle the error response here
-                            }
-                        });
-                    }})
-            });
+            // Send a DELETE request to delete the client
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel',
+            }).then((result) => {
+                console.log(result)
+                if (result.value) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '{{ route('client.destroy') }}', // Use the correct route URL
+                        data: {id: clientId}, // Pass the client ID as a parameter
+                        success: function (data) {
+                            // Handle the success response here
+                            Swal.fire(
+                                false,
+                                data.message,
+                                'success'
+                            );
+                        },
+                        error: function (xhr, status, error) {
+                            console.log(xhr.responseText);
+                            // Handle the error response here
+                        }
+                    });
+                }
+            })
+        });
 
     </script>
 @endsection
