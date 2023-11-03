@@ -63,7 +63,6 @@ class ClientController extends Controller
             }
 
             // Update the client attributes
-            $client->code_client = 'test';
             $client->name_client = $validatedData['client_name'];
             $client->adresse = $validatedData['address'];
             $client->id_city = $validatedData['city_id'];

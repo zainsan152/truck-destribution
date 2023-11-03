@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @section('title', 'Clients')
 @section('plugins.Datatables', true)
-@section('plugins.Sweetalert2', true);
+@section('plugins.Sweetalert2', true)
+@section('plugins.Toasts', true)
 <style>
     .edit-client-button {
         color: dodgerblue;
@@ -13,7 +14,7 @@
         cursor: pointer;
     }
 
-    .client-row td{
+    .client-row td {
         text-align: center;
     }
 </style>
@@ -87,14 +88,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="name">Nom Client *</label>
-                                    <input type="text" name="client_name" class="form-control" id="client_name"
-                                           required>
+                                    <input type="text" name="client_name" class="form-control" id="client_name">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="city_id">Ville *</label>
-                                    <select name="city_id" id="city_id" class="form-control" required>
+                                    <select name="city_id" id="city_id" class="form-control">
                                         <option value="">Select value</option>
                                         @foreach($cities as $city)
                                             <option value="{{$city->id_city}}">{{$city->city}}</option>
@@ -134,10 +134,9 @@
                 'X-CSRF-TOKEN': csrfToken
             }
         });
-        $(document).ready(function () {
-            $('#openModalBtn').click(function () {
-                $('#clientModal').modal('show');
-            });
+        $('#openModalBtn').click(function () {
+            resetClientModalForm();
+            $('#clientModal').modal('show');
         });
 
         // Function to open the modal for adding and updating clients
@@ -219,12 +218,29 @@
                         $(newRow).attr('id', 'clientRow-' + data.client.id_client);
                         $(newRow).find('td').css('text-align', 'center');
                     }
+
                 },
                 error: function (xhr, status, error) {
-                    console.log(xhr.responseText);
+                    $('#clientModal').modal('hide');
+                    $(document).Toasts('create', {
+                        class: 'bg-danger',
+                        title: 'Required fields',
+                        subtitle: false,
+                        body: 'Please choose some data for required fields'
+                    })
                 }
             });
         });
+
+        setTimeout(function () {
+            $('.toast').toast('hide');
+        }, 3000); // 3000 milliseconds (3 seconds)
+
+        function resetClientModalForm() {
+            $('#clientForm')[0].reset(); // This resets the form fields
+            $('#client_id').val(''); // Set the hidden input value to an empty string
+            $('#city_id option').removeAttr('selected'); // Deselect any selected option
+        }
 
         // Handle the click event for the delete icon
         $(document).on('click', '.delete-client-button', function () {
