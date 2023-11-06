@@ -30,4 +30,8 @@ Route::get('show-client', [\App\Http\Controllers\system\ClientController::class,
 Route::delete('delete-client', [\App\Http\Controllers\system\ClientController::class, 'destroy'])->name('client.destroy');
 
 
+Route::get('distributions', [\App\Http\Controllers\system\DistributionController::class, 'index'])->name('distributions');
+Route::post('import-distributions', [\App\Http\Controllers\system\DistributionController::class, 'import'])->name('distributions.import');
+
+
 Auth::routes();

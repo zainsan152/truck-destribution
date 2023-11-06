@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id('id_client');
-            $table->string('code_client');
+            $table->string('code_client')->nullable();
             $table->string('name_client');
             $table->unsignedBigInteger('id_city');
-            $table->text('adresse');
-            $table->unsignedBigInteger('createdby');
-            $table->integer('modifiedby');
+            $table->text('adresse')->nullable();
+            $table->unsignedBigInteger('createdby')->default(1);
+            $table->integer('modifiedby')->default(1);
             $table->timestamps();
         });
     }

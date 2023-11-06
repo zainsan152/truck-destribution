@@ -369,7 +369,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Creee',
-                    'url'  => '#',
+                    'url'  => '/distributions',
                     'icon' => 'fas fa-minus',
                 ],
                 [

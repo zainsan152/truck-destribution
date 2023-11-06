@@ -230,11 +230,11 @@
                     })
                 }
             });
-        });
 
-        setTimeout(function () {
-            $('.toast').toast('hide');
-        }, 3000); // 3000 milliseconds (3 seconds)
+            setTimeout(function () {
+                $('.toast').toast('hide');
+            }, 3000); // 3000 milliseconds (3 seconds)
+        });
 
         function resetClientModalForm() {
             $('#clientForm')[0].reset(); // This resets the form fields

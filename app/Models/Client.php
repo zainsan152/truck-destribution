@@ -17,4 +17,9 @@ class Client extends Model
     {
         return $this->hasOne(City::class, 'id_city', 'id_city');
     }
+
+    public function distributionHeader()
+    {
+        return $this->belongsTo(DistributionHeader::class, 'id_client');
+    }
 }
