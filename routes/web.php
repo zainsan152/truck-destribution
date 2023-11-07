@@ -31,6 +31,7 @@ Route::delete('delete-client', [\App\Http\Controllers\system\ClientController::c
 
 
 Route::get('distributions', [\App\Http\Controllers\system\DistributionController::class, 'index'])->name('distributions');
+Route::get('distribution-details/{id}', [\App\Http\Controllers\system\DistributionController::class, 'details'])->name('distributions.details');
 Route::post('import-distributions', [\App\Http\Controllers\system\DistributionController::class, 'import'])->name('distributions.import');
 
 

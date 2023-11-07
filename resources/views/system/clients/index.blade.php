@@ -30,7 +30,7 @@
                         </button>
                     </div>
                     <div class="card-body">
-                        <table id="clients-table" class="table table-bordered">
+                        <table id="clients-table" class="table table-bordered table-striped">
                             <thead>
                             <tr>
                                 <th>Code</th>

@@ -26,7 +26,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_city');
             $table->string('is_mutual');
             $table->unsignedBigInteger('id_truck_category');
-            $table->date('date_order')->nullable();
+            $table->string('date_order')->nullable();
             $table->date('date_execution')->nullable();
             $table->unsignedBigInteger('id_driver');
             $table->unsignedBigInteger('id_vehicule');

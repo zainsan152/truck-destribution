@@ -12,7 +12,7 @@ class DistributionController extends Controller
 {
     public function index()
     {
-        $distributions = DistributionHeader::with('distributionLines', 'city', 'client', 'truckCategory')->get();
+        $distributions = DistributionHeader::all();
         return view('system.distributions.index', ['distributions' => $distributions]);
     }
 
@@ -28,5 +28,11 @@ class DistributionController extends Controller
             // Redirect back with a success message
             return redirect()->route('distributions')->with('success', 'Data imported successfully.');
         }
+    }
+
+    public function details($distribution_id)
+    {
+        $distribution = DistributionHeader::where('id_distribution_header', $distribution_id)->with('distributionLines', 'distributionType')->first();
+        return response()->json(['distribution' => $distribution]);
     }
 }

@@ -31,4 +31,9 @@ class DistributionHeader extends Model
     {
         return $this->belongsTo(TruckCategory::class, 'id_truck_category', 'id');
     }
+
+    public function distributionType()
+    {
+        return $this->belongsTo(DistributionType::class, 'id_type_distribution');
+    }
 }
