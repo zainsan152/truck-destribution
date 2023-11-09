@@ -4,6 +4,8 @@ namespace App\Http\Controllers\system;
 
 use App\Http\Controllers\Controller;
 use App\Models\DistributionHeader;
+use App\Models\Driver;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DistributionImport;
@@ -13,7 +15,9 @@ class DistributionController extends Controller
     public function index()
     {
         $distributions = DistributionHeader::all();
-        return view('system.distributions.index', ['distributions' => $distributions]);
+        $drivers = Driver::all();
+        $vehicles = Vehicle::all();
+        return view('system.distributions.index', ['distributions' => $distributions, 'drivers' => $drivers, 'vehicles' => $vehicles]);
     }
 
     public function import(Request $request)

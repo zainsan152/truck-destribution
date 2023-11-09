@@ -1,4 +1,4 @@
-<?php
+->nullable()<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id('id_driver');
             $table->string('firstname');
             $table->string('lastname');
-            $table->string('num_cin');
-            $table->string('num_permis_conduire');
-            $table->string('n_tel');
+            $table->string('num_cin')->nullable();
+            $table->string('num_permis_conduire')->nullable();
+            $table->string('n_tel')->nullable();
             $table->timestamps();
         });
     }

@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('vehicle_fleet', function (Blueprint $table) {
             $table->id('id_vehicle');
-            $table->string('marque_vehicle');
-            $table->string('modele_vehicle');
-            $table->string('immatriculation');
-            $table->string('num_cartegrise');
-            $table->date('date_acquisition');
+            $table->string('marque_vehicle')->nullable(); //branch
+            $table->string('modele_vehicle')->nullable(); //model
+            $table->string('immatriculation')->nullable(); //registration
+            $table->string('num_cartegrise')->nullable();
+            $table->date('date_acquisition')->nullable();
             $table->unsignedBigInteger('id_truck_category');
             $table->timestamps();
         });

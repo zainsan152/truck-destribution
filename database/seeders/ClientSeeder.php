@@ -14,9 +14,9 @@ class ClientSeeder extends Seeder
     public function run(): void
     {
         $clients = [
-            ['name_client' => 'AXE', 'id_city' => 1],
-            ['name_client' => 'Client1', 'id_city' => 1],
-            ['name_client' => 'Client2', 'id_city' => 1],
+            ['code_client' => 'C001', 'name_client' => 'AXE', 'id_city' => 1],
+            ['code_client' => 'C002', 'name_client' => 'Client1', 'id_city' => 1],
+            ['code_client' => 'C003', 'name_client' => 'Client2', 'id_city' => 1],
         ];
 
         DB::table('clients')->insert($clients);
