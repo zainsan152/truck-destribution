@@ -28,8 +28,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_truck_category');
             $table->string('date_order')->nullable();
             $table->date('date_execution')->nullable();
-            $table->unsignedBigInteger('id_driver');
-            $table->unsignedBigInteger('id_vehicule');
+            $table->unsignedBigInteger('id_driver')->nullable();
+            $table->unsignedBigInteger('id_vehicule')->nullable();
             $table->date('date_delivery')->nullable();
             $table->unsignedBigInteger('id_status_distribution');
             $table->unsignedBigInteger('createdby');

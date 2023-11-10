@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('title', 'Distributions')
 @section('plugins.Datatables', true)
+@section('plugins.Sweetalert2', true)
+@section('plugins.Toasts', true)
 <style>
     .distribution-row td {
         text-align: center;
@@ -19,16 +21,18 @@
                         <h3 class="card-title">Ajoutre une liste de distribution</h3>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('distributions.import') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <label for="file">Add a file</label>
-                                <input type="file" name="file" id="file" class="form-control-file">
-                            </div>
-                            <button type="submit" class="btn btn-primary" style="margin-left: auto;">Import
-                                Distributions
-                            </button>
-                        </form>
+                        <div class="col-md-6">
+                            <form action="{{ route('distributions.import') }}" method="POST" enctype="multipart/form-data" class="form-inline">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="file">Add a file</label>
+                                    <input type="file" name="file" id="file" class="form-control-file">
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-3" style="margin-left: auto;">Import
+                                    Distributions
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -107,7 +111,7 @@
     </div>
 
     <div class="fade modal" id="planifier-modal" style="display: none;">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"></h5>
@@ -116,50 +120,40 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="execution-date">Exécution Date</label>
-                                    <input type="date" class="form-control" id="execution-date"
-                                           placeholder="17/12/2022">
-                                </div>
-                            </div>
+                    <form id="plainify_form">
+                        <input type="hidden" name="distribution_id" id="distribution_id">
+
+                        <div class="form-group">
+                            <label for="execution-date">Exécution Date *</label>
+                            <input type="date" class="form-control" id="execution_date" name="execution_date"
+                                   placeholder="17/12/2022">
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="driver-info">Driver</label>
-                                    <select name="driver_id" id="driver_id" class="form-control">
-                                        <option value="">Select value</option>
-                                        @foreach($drivers as $driver)
-                                            <option value="{{$driver->id_driver}}">
-                                                {{$driver->firstname}} {{$driver->lastname}}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label for="driver-info">Driver *</label>
+                            <select name="driver_id" id="driver_id" class="form-control">
+                                <option value="">Select value</option>
+                                @foreach($drivers as $driver)
+                                    <option value="{{$driver->id_driver}}">
+                                        {{$driver->firstname}} {{$driver->lastname}}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="truck-info">Truck</label>
-                                    <select name="vehicle_id" id="vehicle_id" class="form-control">
-                                        <option value="">Select value</option>
-                                        @foreach($vehicles as $vehicle)
-                                            <option value="{{$vehicle->id_vehicle}}">
-                                                {{$vehicle->marque_vehicle}} {{$vehicle->modele_vehicle}} {{$vehicle->immatriculation}}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label for="truck-info">Truck *</label>
+                            <select name="vehicle_id" id="vehicle_id" class="form-control">
+                                <option value="">Select value</option>
+                                @foreach($vehicles as $vehicle)
+                                    <option value="{{$vehicle->id_vehicle}}">
+                                        {{$vehicle->marque_vehicle}} {{$vehicle->modele_vehicle}} {{$vehicle->immatriculation}}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <i type="button" class="fas fa-file btn btn-secondary" id="planifier-btn-submit"> Planifier
+                    <i type="submit" class="fas fa-file btn btn-secondary" id="planifier-btn-submit"> Planifier
                         Distribution</i>
                 </div>
             </div>
@@ -171,6 +165,16 @@
 @section('js')
     <script>
         var table = $('#distributions-table').DataTable();
+
+        // Get the CSRF token value from the meta tag in your HTML
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        // Include the CSRF token in your Ajax request headers
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            }
+        });
 
         $(document).ready(function () {
             // Click event handler for the icon
@@ -237,6 +241,7 @@
                         $('#distributionModal').modal('show');
 
                         $('#planifier-btn').attr('data-distribution-id', distributionId);
+                        $('#distribution_id').val(distributionId);
                         var planifierModalTitle = $('#planifier-modal .modal-title');
                         planifierModalTitle.text('Details Distribution ' + (distributionDetails.code_distribution).padStart(5, '0') + ' - Planifi la distribution');
                     },
@@ -249,8 +254,59 @@
             $('#planifier-btn').click(function () {
                 var distributionId = $(this).data('distribution-id');
                 $('#distributionModal').modal('hide');
+                $('#plainify_form')[0].reset();
                 $('#planifier-modal').modal('show');
-            })
+            });
+
+            $("#planifier-btn-submit").click(function (e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                // Get form data
+                var formData = {
+                    'execution_date': $('#execution_date').val(),
+                    'driver_id': $('#driver_id').val(),
+                    'vehicle_id': $('#vehicle_id').val(),
+                    'distribution_id': $('#distribution_id').val()
+                    // Add other form fields here if needed
+                };
+
+                // Send an AJAX request to your server
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route("distribution.planify") }}',
+                    data: formData,
+                    success: function (data) {
+                        $('#planifier-modal').modal('hide');
+                        // Handle the success response from the server
+                        Swal.fire(
+                            false,
+                            data.message,
+                            'success'
+                        );
+                    },
+                    error: function (xhr, status, error) {
+                        // You can display an error message or handle errors as needed
+                        if (xhr.status === 409) {
+                            $('#planifier-modal').modal('hide');
+                            Swal.fire(
+                                false,
+                                xhr.responseJSON.message,
+                                'error'
+                            );
+                        } else {
+                            $(document).Toasts('create', {
+                                class: 'bg-danger',
+                                title: 'Required fields',
+                                subtitle: false,
+                                body: 'Please choose some data for required fields'
+                            })
+                        }
+                    }
+                });
+                setTimeout(function () {
+                    $('.toast').toast('hide');
+                }, 3000);
+            });
         });
 
     </script>
