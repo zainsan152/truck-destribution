@@ -26,6 +26,9 @@
         border: none;
     }
 </style>
+@vite(['resources/js/app.js'])
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/fontawesome.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 @section('content')
     <div class="container">
         <div class="row pt-5">
@@ -34,11 +37,11 @@
                     <div class="card h-100">
                         <div class="card-body text-center d-flex flex-column justify-content-center">
                             @if ($category->truck_category === 'Tracteur')
-                                <i class="fas fa-tractor fa-3x mb-3"></i>
+                                <i class="fas fa-truck fa-3x mb-3"></i>
                             @elseif ($category->truck_category === 'Remorque')
-                                <i class="fas fa-trailer fa-3x mb-3"></i>
-                            @elseif ($category->truck_category === 'Camion')
                                 <i class="fas fa-truck-moving fa-3x mb-3"></i>
+                            @elseif ($category->truck_category === 'Camion')
+                                <i class="fa-solid fa-truck-fast fa-3x mb-3"></i>
                             @endif
                             <h5 class="card-title">Available Trucks ({{$category->truck_category}})
                                 : {{$category->truck_count}}</h5>

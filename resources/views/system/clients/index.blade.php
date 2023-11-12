@@ -18,6 +18,7 @@
         text-align: center;
     }
 </style>
+@vite(['resources/js/app.js'])
 @section('content')
     <div class="container">
         <div class="row pt-5">
