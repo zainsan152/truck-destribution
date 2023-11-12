@@ -1,5 +1,6 @@
 @extends('adminlte::page')
 @section('title', 'Dashboard')
+<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 <style>
     a {
         color: black !important;

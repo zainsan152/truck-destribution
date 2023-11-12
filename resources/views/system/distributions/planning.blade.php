@@ -71,7 +71,7 @@
                                         <td>
                                             @foreach ($driverMappings as $mapping)
                                                 @if ($mapping->id_driver === $driver->id_driver && $mapping->id_distribution_header === $distribution->id_distribution_header)
-                                                    {{ $mapping->flag_status }}
+                                                    {{ ucfirst($mapping->flag_status) }}
                                                 @endif
                                             @endforeach
                                         </td>
@@ -89,17 +89,17 @@
 @section('js')
     <script>
         $(document).ready(function () {
-            $("td:contains('pending')").css(
+            $("td:contains('Pending')").css(
                 {
                     "background-color": "skyblue",
                     "border-radius": "10px" // You can adjust the radius to your preference
                 });
-            $("TD:contains('ongoing')").css(
+            $("TD:contains('Ongoing')").css(
                 {
                     "background-color": "yellow",
                     "border-radius": "10px"
                 });
-            $("TD:contains('done')").css(
+            $("TD:contains('Done')").css(
                 {
                     "background-color": "lightgreen",
                     "border-radius": "10px"

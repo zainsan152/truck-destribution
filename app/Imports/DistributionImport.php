@@ -39,7 +39,7 @@ class DistributionImport implements ToCollection
                 if(isset($collection['ville']))
                     $city = City::where('city', $collection['ville'])->first();
                 if(isset($collection['Type camion']))
-                    $truck_category = TruckCategory::where('truck_category', $collection['Type camion'])->first();
+                    $truck_category = TruckCategory::where('truck_category', 'Camion')->first();
                 // Detect if "Mutualisé ou NN" value has changed (and is not null for the first row)
                     if ($lastMutualiseValue !== $collection['Mutualisé ou NN']) {
                     // Create a new DistributionHeader

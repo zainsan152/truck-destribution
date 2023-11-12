@@ -25,7 +25,7 @@ return new class extends Migration
             $table->float('distance')->nullable();
             $table->unsignedBigInteger('id_city');
             $table->string('is_mutual');
-            $table->unsignedBigInteger('id_truck_category');
+            $table->unsignedBigInteger('id_truck_category')->nullable();
             $table->string('date_order')->nullable();
             $table->date('date_execution')->nullable();
             $table->unsignedBigInteger('id_driver')->nullable();
