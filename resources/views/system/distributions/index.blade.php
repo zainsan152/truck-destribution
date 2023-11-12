@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('adminlte::page')
 @section('title', 'Distributions')
 @section('plugins.Datatables', true)
 @section('plugins.Sweetalert2', true)

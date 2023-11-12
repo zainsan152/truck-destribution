@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('adminlte::page')
 @section('title', 'Planning')
 <style>
     table {
@@ -14,6 +14,17 @@
     a {
         color: black !important;
     }
+
+    /* Remove borders from the table */
+    .table.table-bordered {
+        border: none;
+    }
+
+    /* Remove borders from table cells (td and th elements) */
+    .table.table-bordered td,
+    .table.table-bordered th {
+        border: none;
+    }
 </style>
 @section('content')
     <div class="container">
@@ -22,8 +33,15 @@
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">
                         <div class="card-body text-center d-flex flex-column justify-content-center">
-                            <i class="fas fa-truck-moving fa-3x mb-3"></i>
-                            <h5 class="card-title">Available Trucks ({{$category->truck_category}}) : {{$category->truck_count}}</h5>
+                            @if ($category->truck_category === 'Tracteur')
+                                <i class="fas fa-tractor fa-3x mb-3"></i>
+                            @elseif ($category->truck_category === 'Remorque')
+                                <i class="fas fa-trailer fa-3x mb-3"></i>
+                            @elseif ($category->truck_category === 'Camion')
+                                <i class="fas fa-truck-moving fa-3x mb-3"></i>
+                            @endif
+                            <h5 class="card-title">Available Trucks ({{$category->truck_category}})
+                                : {{$category->truck_count}}</h5>
                         </div>
                     </div>
                 </div>
@@ -71,9 +89,21 @@
 @section('js')
     <script>
         $(document).ready(function () {
-            $("TD:contains('pending')").css("background-color", "skyblue");
-            $("TD:contains('ongoing')").css("background-color", "yellow");
-            $("TD:contains('done')").css("background-color", "lightgreen");
+            $("td:contains('pending')").css(
+                {
+                    "background-color": "skyblue",
+                    "border-radius": "10px" // You can adjust the radius to your preference
+                });
+            $("TD:contains('ongoing')").css(
+                {
+                    "background-color": "yellow",
+                    "border-radius": "10px"
+                });
+            $("TD:contains('done')").css(
+                {
+                    "background-color": "lightgreen",
+                    "border-radius": "10px"
+                });
         });
     </script>
 @endsection

@@ -13,6 +13,8 @@ class TruckCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('truck_category')->insert(['truck_category' => 'RMQ']);
+        DB::table('truck_category')->insert(['truck_category' => 'Camion']);
+        DB::table('truck_category')->insert(['truck_category' => 'Tracteur']);
+        DB::table('truck_category')->insert(['truck_category' => 'Remorque']);
     }
 }

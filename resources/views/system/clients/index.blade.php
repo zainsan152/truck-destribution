@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('adminlte::page')
 @section('title', 'Clients')
 @section('plugins.Datatables', true)
 @section('plugins.Sweetalert2', true)
@@ -46,8 +46,8 @@
                                 <tr id="clientRow-{{$client->id_client}}" class="client-row">
                                     <td>{{$client->code_client}}</td>
                                     <td>{{$client->name_client}}</td>
-                                    <td>{{$client->adresse}}</td>
                                     <td>{{$client->city->city}}</td>
+                                    <td>{{$client->adresse}}</td>
                                     <td>
                                         <i class="fas fa-edit edit-client-button"
                                            data-client-id="{{ $client->id_client }}"
@@ -198,8 +198,8 @@
                         var row = table.row('#clientRow-' + client_id).data([
                             data.client.code_client,
                             data.client.name_client,
-                            data.client.adresse,
                             data.client.city.city,
+                            data.client.adresse,
                             '<i class="fas fa-edit edit-client-button" data-client-id="' + data.client.id_client + '" data-client-name="' + data.client.name_client + '" data-city-id="' + data.client.id_city + '" data-client-address="' + data.client.adresse + '"></i>',
                             '<i class="fas fa-trash-alt delete-client-button" data-client-id="' + data.client.id_client + '"></i>'
                         ]).draw();
