@@ -18,9 +18,8 @@
                     </div>
                 </a>
             </div>
-
             <div class="col-md-4 mb-4">
-                <a href="#">
+                <a href="{{route('planning')}}">
                     <div class="card h-100">
                         <div class="card-body text-center d-flex flex-column justify-content-center">
                             <i class="fas fa-tasks fa-3x mb-3"></i>

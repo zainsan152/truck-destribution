@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PlanifiedRequest;
 use App\Models\DistributionHeader;
 use App\Models\Driver;
+use App\Models\TruckCategory;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -79,6 +80,7 @@ class DistributionController extends Controller
                 [
                     'id_driver' => $validatedData['driver_id'],
                     'id_vehicle' => $validatedData['vehicle_id'],
+                    'id_distribution_header' => $validatedData['distribution_id'],
                     'flag_status' => 'pending'
                 ]
             );
@@ -88,6 +90,21 @@ class DistributionController extends Controller
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()]);
         }
-
     }
+
+    public function planning()
+    {
+        $categories = DB::table('truck_category')
+            ->join('vehicle_fleet', 'vehicle_fleet.id_truck_category', 'truck_category.id')
+            ->selectRaw('count(vehicle_fleet.id_vehicle) as truck_count, truck_category.truck_category')
+            ->groupBy('truck_category.id')
+            ->get();
+
+        $drivers = Driver::all();
+        $distributions = DistributionHeader::all();
+        $driverMappings = DB::table('mapping_driver_vehicle')->get();
+
+        return view('system.distributions.planning', compact('drivers', 'distributions', 'driverMappings', 'categories'));
+    }
+
 }

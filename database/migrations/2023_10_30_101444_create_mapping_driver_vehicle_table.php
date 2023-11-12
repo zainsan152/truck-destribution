@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_driver');
             $table->unsignedBigInteger('id_vehicle');
+            $table->unsignedBigInteger('id_distribution_header');
             $table->string('flag_status');
             $table->timestamps();
         });

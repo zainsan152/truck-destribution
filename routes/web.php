@@ -33,6 +33,7 @@ Route::delete('delete-client', [\App\Http\Controllers\system\ClientController::c
 Route::get('distributions', [\App\Http\Controllers\system\DistributionController::class, 'index'])->name('distributions');
 Route::get('distribution-details/{id}', [\App\Http\Controllers\system\DistributionController::class, 'details'])->name('distributions.details');
 Route::post('import-distributions', [\App\Http\Controllers\system\DistributionController::class, 'import'])->name('distributions.import');
+Route::get('planning', [\App\Http\Controllers\system\DistributionController::class, 'planning'])->name('planning');
 Route::post('planify-distribution', [\App\Http\Controllers\system\DistributionController::class, 'planify_distribution'])->name('distribution.planify');
 
 

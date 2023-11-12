@@ -341,7 +341,7 @@ return [
         ],
         [
             'text' => 'Planning',
-            'url'  => '#',
+            'url'  => 'planning',
 //            'icon' => 'fas fa-fw fa-lock',
         ],
         [
