@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('num_cartegrise')->nullable();
             $table->date('date_acquisition')->nullable();
             $table->unsignedBigInteger('id_truck_category');
+            $table->enum('status', ['available', 'unavailable'])->default('available');
             $table->timestamps();
         });
     }

@@ -24,7 +24,7 @@ class DistributionHeader extends Model
 
     public function client()
     {
-        return $this->hasOne(Client::class, 'id_client');
+        return $this->hasOne(Client::class, 'id_client', 'id_client');
     }
 
     public function truckCategory()

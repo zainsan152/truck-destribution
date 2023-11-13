@@ -23,13 +23,15 @@
                     </div>
                     <div class="card-body">
                         <div class="col-md-6">
-                            <form action="{{ route('distributions.import') }}" method="POST" enctype="multipart/form-data" class="form-inline">
+                            <form action="{{ route('distributions.import') }}" method="POST"
+                                  enctype="multipart/form-data" class="form-inline">
                                 @csrf
                                 <div class="form-group">
                                     <label for="file">Add a file</label>
                                     <input type="file" name="file" id="file" class="form-control-file">
                                 </div>
-                                <button type="submit" class="btn btn-primary mt-3" style="margin-left: auto;">Import
+                                <button type="submit" class="btn btn-primary mt-3" style="margin-left: auto;"
+                                        id="fileBtn">Import
                                     Distributions
                                 </button>
                             </form>
@@ -178,6 +180,26 @@
         });
 
         $(document).ready(function () {
+            // When the file form is submitted
+            $("#fileBtn").click(function (event) {
+                // Get the value of the file input field
+                var fileInput = $("#file")[0];
+
+                // Check if a file has been selected
+                if (fileInput.files.length === 0) {
+                    // No file selected, display an error message or perform any desired action
+                    $(document).Toasts('create', {
+                        class: 'bg-danger',
+                        title: 'Required file',
+                        subtitle: false,
+                        body: 'Please select a file'
+                    })
+                    event.preventDefault(); // Prevent form submission
+                }
+                setTimeout(function () {
+                    $('.toast').toast('hide');
+                }, 3000);
+            });
             // Click event handler for the icon
             $('.show-distribution-details').click(function () {
                 // Get the distribution ID from the data attribute

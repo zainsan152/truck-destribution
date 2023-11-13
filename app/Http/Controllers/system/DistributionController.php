@@ -51,6 +51,8 @@ class DistributionController extends Controller
             // Redirect back with a success message
             return redirect()->route('distributions')->with('success', 'Data imported successfully.');
         }
+
+            return redirect()->route('distributions')->with('error', 'Please select file.');
     }
 
     public function details($distribution_id)
@@ -84,6 +86,7 @@ class DistributionController extends Controller
                     'flag_status' => 'pending'
                 ]
             );
+            Vehicle::where('id_vehicle', $validatedData['vehicle_id'])->update(['status' => 'unavailable']);
             DB::commit();
             return response()->json(['message' => 'Your distribution has been successfully planified']);
         } catch (\Exception $e) {
@@ -97,6 +100,7 @@ class DistributionController extends Controller
         $categories = DB::table('truck_category')
             ->join('vehicle_fleet', 'vehicle_fleet.id_truck_category', 'truck_category.id')
             ->selectRaw('count(vehicle_fleet.id_vehicle) as truck_count, truck_category.truck_category')
+            ->where('vehicle_fleet.status', 'available')
             ->groupBy('truck_category.id')
             ->get();
 
