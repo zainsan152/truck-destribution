@@ -36,7 +36,7 @@ class ClientController extends Controller
             ]);
             $client->load('city');
             DB::commit();
-            return response()->json(['message' => 'Client added successfully', 'client' => $client]);
+            return response()->json(['message' => 'Client ajouté avec succès', 'client' => $client]);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()]);
@@ -72,7 +72,7 @@ class ClientController extends Controller
             $client->load('city');
 
             DB::commit();
-            return response()->json(['message' => 'Client updated successfully', 'client' => $client]);
+            return response()->json(['message' => 'Client mis à jour avec succès', 'client' => $client]);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()]);
@@ -83,7 +83,7 @@ class ClientController extends Controller
     {
         $client = Client::findorFail($request->id);
         $client->delete();
-        return response()->json(['message' => 'Client deleted successfully']);
+        return response()->json(['message' => 'Client supprimé avec succès']);
     }
 
 }

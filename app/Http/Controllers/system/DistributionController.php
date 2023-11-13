@@ -69,7 +69,7 @@ class DistributionController extends Controller
             $planifiedDistribution = DistributionHeader::where('id_distribution_header', $validatedData['distribution_id'])->whereNotNull('id_driver')->whereNotNull('id_vehicule')->exists();
 
             if ($planifiedDistribution) {
-                return response()->json(['message' => 'Your distribution has already planified'], 409);
+                return response()->json(['message' => 'Votre distribution est déjà planifiée'], 409);
             }
             $distributions = DistributionHeader::where('id_distribution_header', $validatedData['distribution_id'])->update(
                 [
@@ -88,7 +88,7 @@ class DistributionController extends Controller
             );
             Vehicle::where('id_vehicle', $validatedData['vehicle_id'])->update(['status' => 'unavailable']);
             DB::commit();
-            return response()->json(['message' => 'Your distribution has been successfully planified']);
+            return response()->json(['message' => 'Votre distribution a été planifiée avec succès']);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()]);
