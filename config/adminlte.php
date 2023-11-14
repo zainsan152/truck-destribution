@@ -332,40 +332,41 @@ return [
         [
             'text' => 'Dashboard',
             'url'  => 'home',
-//            'icon' => 'fas fa-fw fa-lock',
+            'icon' => 'false',
         ],
         [
             'text'    => 'Tableau de bord',
             'url'  => '#',
-//            'icon'    => 'fas fa-fw fa-share',
+            'icon'    => false,
         ],
         [
             'text' => 'Planning',
             'url'  => 'planning',
-//            'icon' => 'fas fa-fw fa-lock',
+            'icon' => false,
         ],
         [
             'text' => 'Gestion des OTs',
             'url'  => '#',
-//            'icon' => 'fas fa-fw fa-lock',
+            'icon' => false,
         ],
         [
             'text' => 'POD/IOD',
             'url'  => '#',
-//            'icon' => 'fas fa-fw fa-lock',
+            'icon' => false,
         ],
         [
             'text' => 'Gestion des OTs',
             'url'  => '#',
-//            'icon' => 'fas fa-fw fa-lock',
+            'icon' => false,
         ],
         [
             'text' => 'Arrivage',
             'url'  => '#',
-//            'icon' => 'fas fa-fw fa-lock',
+            'icon' => false,
         ],
         [
             'text' => 'Distribution',
+            'icon' => false,
             'submenu' => [
                 [
                     'text' => 'Creee',
@@ -399,17 +400,17 @@ return [
         [
             'text' => 'Autre 1',
             'url'  => '#',
-//            'icon' => 'fas fa-fw fa-lock',
+            'icon' => false,
         ],
         [
             'text' => 'Autre 2',
             'url'  => '#',
-//            'icon' => 'fas fa-fw fa-lock',
+            'icon' => false,
         ],
         [
             'text' => 'Parametrage',
             'url'  => '#',
-//            'icon' => 'fas fa-fw fa-lock',
+            'icon' => false,
             'submenu' => [
                 [
                     'text' => 'Type OT',
@@ -528,6 +529,16 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css',
                 ],
                 [
                     'type' => 'css',

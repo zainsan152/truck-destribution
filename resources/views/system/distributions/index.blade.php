@@ -11,6 +11,14 @@
     .show-distribution-details {
         cursor: pointer;
     }
+
+    #distributions-table {
+        width: 100% !important;
+    }
+
+    #lines-table {
+        width: 100% !important;
+    }
 </style>
 @vite(['resources/js/app.js'])
 @section('content')
@@ -30,7 +38,7 @@
                                     <label for="file">Add a file</label>
                                     <input type="file" name="file" id="file" class="form-control-file">
                                 </div>
-                                <button type="submit" class="btn btn-primary mt-3" style="margin-left: auto;"
+                                <button type="submit" class="btn btn-primary mt-3"
                                         id="fileBtn">Import
                                     Distributions
                                 </button>
@@ -167,7 +175,9 @@
 
 @section('js')
     <script>
-        var table = $('#distributions-table').DataTable();
+        var table = $('#distributions-table').DataTable({
+            responsive: true
+        });
 
         // Get the CSRF token value from the meta tag in your HTML
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -201,7 +211,7 @@
                 }, 3000);
             });
             // Click event handler for the icon
-            $('.show-distribution-details').click(function () {
+            $(document).on('click', '.show-distribution-details', function () {
                 // Get the distribution ID from the data attribute
                 var distributionId = $(this).data('distribution-id');
 
@@ -258,7 +268,9 @@
                         modalBody.empty(); // Clear previous content
                         modalBody.append(additionalDetailsHtml);
                         modalBody.append(tableHtml);
-                        $('#lines-table').DataTable();
+                        $('#lines-table').DataTable({
+                            responsive: true
+                        });
 
                         // Show the modal
                         $('#distributionModal').modal('show');

@@ -25,6 +25,10 @@
     .table.table-bordered th {
         border: none;
     }
+
+    #gannt-chart{
+        width: 100% !important;
+    }
 </style>
 @vite(['resources/js/app.js'])
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/fontawesome.min.css" />
@@ -56,13 +60,14 @@
                         <h3 class="card-title">Planning</h3>
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" id="gannt-chart">
                             <thead>
                             <tr>
                                 <th></th>
                                 @foreach ($distributions as $distribution)
                                     <th>
-                                        Distribution {{ str_pad($distribution->code_distribution, 5, '0', STR_PAD_LEFT) }}</th>
+                                        Distribution {{ str_pad($distribution->code_distribution, 5, '0', STR_PAD_LEFT) }}
+                                    </th>
                                 @endforeach
                             </tr>
                             </thead>

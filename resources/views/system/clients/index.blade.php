@@ -17,6 +17,9 @@
     .client-row td {
         text-align: center;
     }
+    #clients-table{
+        width: 100% !important;
+    }
 </style>
 @vite(['resources/js/app.js'])
 @section('content')
@@ -125,7 +128,9 @@
 @endsection
 @section('js')
     <script>
-        var table = $('#clients-table').DataTable();
+        var table = $('#clients-table').DataTable({
+            responsive: true
+        });
         // Get the CSRF token value from the meta tag in your HTML
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
