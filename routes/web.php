@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,15 +15,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect('/home');
+    }
     return view('auth.login');
 });
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Route::get('clients', [\App\Http\Controllers\system\ClientController::class, 'index'])->name('clients');
 Route::post('store-client', [\App\Http\Controllers\system\ClientController::class, 'store'])->name('client.store');
 Route::post('update-client', [\App\Http\Controllers\system\ClientController::class, 'update'])->name('client.update');
