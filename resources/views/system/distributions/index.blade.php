@@ -23,7 +23,7 @@
 @vite(['resources/js/app.js'])
 @section('content')
     <div class="container">
-        <div class="row pt-5">
+        <div class="row pt-3">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <div class="row pt-5">
+        <div class="row pt-3">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header" style="display: flex; align-items: center;">
@@ -177,7 +177,6 @@
     <script>
         var table = $('#distributions-table').DataTable({
             responsive: true,
-            info: false
         });
 
         // Get the CSRF token value from the meta tag in your HTML
@@ -270,8 +269,7 @@
                         modalBody.append(additionalDetailsHtml);
                         modalBody.append(tableHtml);
                         $('#lines-table').DataTable({
-                            responsive: true,
-                            info: false
+                            responsive: true
                         });
 
                         // Show the modal

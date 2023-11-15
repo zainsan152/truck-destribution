@@ -32,16 +32,21 @@ class DistributionImport implements ToCollection
             });
             $lastMutualiseValue = null; // Tracks the last "Mutualisé ou NN" value
             $currentDistributionHeader = null;
-            $i = 0;
+            $latestCode = DistributionHeader::latest('id_distribution_header')->first();
+            if ($latestCode) {
+                $i = $latestCode->code_distribution;
+            } else {
+                $i = 0;
+            }
             foreach ($collections->toArray() as $index => $collection) {
-                if(isset($collection['Mutualisé ou NN']))
+                if (isset($collection['Mutualisé ou NN']))
                     $client = Client::where('name_client', $collection['Mutualisé ou NN'])->first();
-                if(isset($collection['ville']))
+                if (isset($collection['ville']))
                     $city = City::where('city', $collection['ville'])->first();
-                if(isset($collection['Type camion']))
+                if (isset($collection['Type camion']))
                     $truck_category = TruckCategory::where('truck_category', 'Camion')->first();
                 // Detect if "Mutualisé ou NN" value has changed (and is not null for the first row)
-                    if ($lastMutualiseValue !== $collection['Mutualisé ou NN']) {
+                if ($lastMutualiseValue !== $collection['Mutualisé ou NN']) {
                     // Create a new DistributionHeader
                     $currentDistributionHeader = DistributionHeader::create([
                         'qty' => $collection['Total pièce'],

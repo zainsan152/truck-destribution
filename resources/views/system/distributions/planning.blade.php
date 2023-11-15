@@ -35,7 +35,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 @section('content')
     <div class="container">
-        <div class="row pt-5">
+        <div class="row pt-3">
             @foreach($categories as $category)
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">

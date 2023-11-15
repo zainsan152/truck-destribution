@@ -24,7 +24,7 @@
 @vite(['resources/js/app.js'])
 @section('content')
     <div class="container">
-        <div class="row pt-5">
+        <div class="row pt-3">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header" style="display: flex; align-items: center;">
@@ -130,7 +130,6 @@
     <script>
         var table = $('#clients-table').DataTable({
             responsive: true,
-            info: false
         });
         // Get the CSRF token value from the meta tag in your HTML
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -228,7 +227,7 @@
 
                 },
                 error: function (xhr, status, error) {
-                    $('#clientModal').modal('hide');
+                    // $('#clientModal').modal('hide');
                     $(document).Toasts('create', {
                         class: 'bg-danger',
                         title: 'Required fields',
