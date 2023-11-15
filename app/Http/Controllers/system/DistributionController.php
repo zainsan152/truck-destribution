@@ -15,6 +15,11 @@ use App\Imports\DistributionImport;
 
 class DistributionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         // Get all distribution records to extract driver IDs
