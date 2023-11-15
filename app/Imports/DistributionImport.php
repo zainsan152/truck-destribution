@@ -22,6 +22,26 @@ class DistributionImport implements ToCollection
         DB::beginTransaction();
 
         try {
+            /*$distributionHeader = DistributionHeader::all()->toArray();
+            dd($distributionHeader);*/
+            // Loop through each sub-array
+            /*foreach ($array as $subArray) {
+                // Check if both keys exist in the sub-array
+                if (array_key_exists('is_mutual', $subArray) && array_key_exists('axe_distribution', $subArray)) {
+                    // Access the values
+                    $isMutual = $subArray['is_mutual'];
+                    $axeDistribution = $subArray['axe_distribution'];
+
+                    // Perform your comparison or checks here
+                    if ($isMutual === $axeDistribution) {
+                        echo "In this sub-array, is_mutual and axe_distribution are equal.\n";
+                    } else {
+                        echo "In this sub-array, is_mutual and axe_distribution are not equal.\n";
+                    }
+                } else {
+                    echo "One or both keys are missing in a sub-array.\n";
+                }
+            }*/
             // Remove the first row and use it as header
             $headers = $collections->pull(0);
 

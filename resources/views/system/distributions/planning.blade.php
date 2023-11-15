@@ -26,13 +26,13 @@
         border: none;
     }
 
-    #gannt-chart{
+    #gannt-chart {
         width: 100% !important;
     }
 </style>
 @vite(['resources/js/app.js'])
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/fontawesome.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/fontawesome.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
 @section('content')
     <div class="container">
         <div class="row pt-3">
@@ -91,6 +91,11 @@
                     </div>
                 </div>
             </div>
+            @if(empty($driverMappings->toArray()))
+                <div class="col-md-12">
+                    <p style="background-color: #8b2512; color: white; font-weight: 400; font-size: 1.1rem;"> Aucune distribution planifiée!</p>
+                </div>
+            @endif
         </div>
     </div>
 @endsection

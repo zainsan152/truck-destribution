@@ -103,15 +103,17 @@ class DistributionController extends Controller
     public function planning()
     {
         $categories = DB::table('truck_category')
-            ->join('vehicle_fleet', 'vehicle_fleet.id_truck_category', 'truck_category.id')
+            ->leftJoin('vehicle_fleet', 'vehicle_fleet.id_truck_category', 'truck_category.id')
             ->selectRaw('count(vehicle_fleet.id_vehicle) as truck_count, truck_category.truck_category')
             ->where('vehicle_fleet.status', 'available')
             ->groupBy('truck_category.id')
             ->get();
 
-        $drivers = Driver::all();
-        $distributions = DistributionHeader::all();
         $driverMappings = DB::table('mapping_driver_vehicle')->get();
+        $driverArray = DB::table('mapping_driver_vehicle')->pluck('id_driver');
+        $DistributionsArray = DB::table('mapping_driver_vehicle')->pluck('id_distribution_header');
+        $drivers = Driver::whereIn('id_driver', $driverArray)->get();
+        $distributions = DistributionHeader::whereIn('id_distribution_header', $DistributionsArray)->get();
 
         return view('system.distributions.planning', compact('drivers', 'distributions', 'driverMappings', 'categories'));
     }

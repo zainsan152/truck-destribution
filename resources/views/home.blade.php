@@ -9,7 +9,7 @@
 @vite(['resources/js/app.js'])
 @section('content')
     <div class="container">
-        <div class="row pt-5">
+        <div class="row pt-3">
             <div class="col-md-4 mb-4">
                 <a href="#">
                     <div class="card h-100">
