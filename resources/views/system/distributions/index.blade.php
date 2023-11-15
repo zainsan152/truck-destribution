@@ -176,7 +176,8 @@
 @section('js')
     <script>
         var table = $('#distributions-table').DataTable({
-            responsive: true
+            responsive: true,
+            info: false
         });
 
         // Get the CSRF token value from the meta tag in your HTML
@@ -269,7 +270,8 @@
                         modalBody.append(additionalDetailsHtml);
                         modalBody.append(tableHtml);
                         $('#lines-table').DataTable({
-                            responsive: true
+                            responsive: true,
+                            info: false
                         });
 
                         // Show the modal

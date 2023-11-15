@@ -129,7 +129,8 @@
 @section('js')
     <script>
         var table = $('#clients-table').DataTable({
-            responsive: true
+            responsive: true,
+            info: false
         });
         // Get the CSRF token value from the meta tag in your HTML
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
