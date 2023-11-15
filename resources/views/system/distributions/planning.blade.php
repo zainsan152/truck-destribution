@@ -93,7 +93,7 @@
             </div>
             @if(empty($driverMappings->toArray()))
                 <div class="col-md-12">
-                    <p style="background-color: #8b2512; color: white; font-weight: 400; font-size: 1.1rem;"> Aucune distribution planifiée!</p>
+                    <p style="background-color: #8b2512; color: white; font-weight: 400; font-size: 1.1rem; padding: 0.75rem"> Aucune distribution planifiée!</p>
                 </div>
             @endif
         </div>
