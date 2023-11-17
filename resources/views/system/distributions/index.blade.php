@@ -112,8 +112,10 @@
                     <!-- Content will be loaded here -->
                 </div>
                 <div class="modal-footer">
-                    <i type="button" class="fas fa-trash-alt btn btn-secondary"> Solder Distribution</i>
-                    <i type="button" class="fas fa-edit btn btn-secondary"> Modifier Distribution</i>
+                    <i type="button" class="fas fa-trash-alt btn btn-secondary" id="delete-distribution-btn"> Solder
+                        Distribution</i>
+                    <a type="button" class="fas fa-edit btn btn-secondary" id="edit-lines-btn"> Modifier
+                        Distribution</a>
                     <i type="button" class="fas fa-file btn btn-secondary" id="planifier-btn"> Planifier
                         Distribution</i>
                 </div>
@@ -276,6 +278,12 @@
                         $('#distributionModal').modal('show');
 
                         $('#planifier-btn').attr('data-distribution-id', distributionId);
+                        $('#delete-distribution-btn').attr('data-distribution-id', distributionId);
+                        var url = "{{ route('lines.edit', ['id' => ':id']) }}";
+                        url = url.replace(':id', distributionId);
+
+                        // Assign the URL as a data attribute to the button
+                        $("#edit-lines-btn").attr("href", url);
                         $('#distribution_id').val(distributionId);
                         var planifierModalTitle = $('#planifier-modal .modal-title');
                         planifierModalTitle.text('Details Distribution ' + (distributionDetails.code_distribution).padStart(5, '0') + ' - Planifi la distribution');
@@ -341,6 +349,44 @@
                 setTimeout(function () {
                     $('.toast').toast('hide');
                 }, 3000);
+            });
+
+            $(document).on('click', '#delete-distribution-btn', function () {
+                var distributionId = $(this).data('distribution-id');
+
+                // Confirm the deletion with the user (optional)
+                // Send a DELETE request to delete the client
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Voulez-vous supprimer cette distribution ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui',
+                    cancelButtonText: 'Non',
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '{{ route('distribution.delete') }}', // Use the correct route URL
+                            data: {id: distributionId}, // Pass the client ID as a parameter
+                            success: function (data) {
+                                // Handle the success response here
+                                Swal.fire(
+                                    false,
+                                    data.message,
+                                    'success'
+                                );
+                                $('#distributionModal').modal('hide');
+                                // Remove the row from table
+                                table.row('#distributionRow-' + distributionId).remove().draw();
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(xhr.responseText);
+                                // Handle the error response here
+                            }
+                        });
+                    }
+                })
             });
         });
 

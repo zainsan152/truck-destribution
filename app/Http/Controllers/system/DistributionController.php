@@ -5,6 +5,7 @@ namespace App\Http\Controllers\system;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PlanifiedRequest;
 use App\Models\DistributionHeader;
+use App\Models\DistributionLine;
 use App\Models\Driver;
 use App\Models\TruckCategory;
 use App\Models\Vehicle;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DistributionImport;
+use SebastianBergmann\Diff\Line;
 
 class DistributionController extends Controller
 {
@@ -57,7 +59,7 @@ class DistributionController extends Controller
             return redirect()->route('distributions')->with('success', 'Data imported successfully.');
         }
 
-            return redirect()->route('distributions')->with('error', 'Please select file.');
+        return redirect()->route('distributions')->with('error', 'Please select file.');
     }
 
     public function details($distribution_id)
@@ -116,6 +118,63 @@ class DistributionController extends Controller
         $distributions = DistributionHeader::whereIn('id_distribution_header', $DistributionsArray)->get();
 
         return view('system.distributions.planning', compact('drivers', 'distributions', 'driverMappings', 'categories'));
+    }
+
+
+    public function delete_distribution(Request $request)
+    {
+        $header = DistributionHeader::findOrFail($request->id);
+        // Delete related lines
+        $header->distributionLines()->delete();
+        // Then delete the header
+        $header->delete();
+        return response()->json(['message' => 'DistributionHeader and related lines deleted']);
+    }
+
+    public function edit_distribution_lines($id)
+    {
+        $lines = DistributionLine::where('id_distribution_header', $id)->get();
+        return view('system.distributions.lines.edit', compact('lines'));
+    }
+
+    public function delete_distribution_lines(Request $request)
+    {
+        $line = DistributionLine::findorFail($request->id);
+
+        $header = DistributionHeader::where('id_distribution_header', $line->id_distribution_header)->first();
+        $header->update([
+            'volume' => $header->volume - $line->volume_line,
+            'qty' => $header->qty - $line->qty_line,
+        ]);
+        $line->delete();
+        return response()->json(['message' => 'Distribution line deleted successfully']);
+    }
+
+    public function get_distribution_line(Request $request)
+    {
+        $lines = DistributionLine::findOrFail($request->id);
+        return response()->json(['data' => $lines]);
+    }
+
+    public function update_distribution_line(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $line = DistributionLine::findOrFail($request->line_id);
+            if (!$line) {
+                return response()->json(['error' => 'Line not found'], 404);
+            }
+            $line->num_bl = $request->nbl;
+            $line->name_delivery = $request->livrasion;
+            $line->qty_line = $request->qte;
+            $line->volume_line = $request->volume;
+            $line->save();
+            DB::commit();
+            return response()->json(['message' => 'Distribution line updated successfully', 'line' => $line]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 
 }

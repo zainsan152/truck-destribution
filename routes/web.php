@@ -36,6 +36,11 @@ Route::get('distribution-details/{id}', [\App\Http\Controllers\system\Distributi
 Route::post('import-distributions', [\App\Http\Controllers\system\DistributionController::class, 'import'])->name('distributions.import');
 Route::get('planning', [\App\Http\Controllers\system\DistributionController::class, 'planning'])->name('planning');
 Route::post('planify-distribution', [\App\Http\Controllers\system\DistributionController::class, 'planify_distribution'])->name('distribution.planify');
+Route::delete('delete-distribution', [\App\Http\Controllers\system\DistributionController::class, 'delete_distribution'])->name('distribution.delete');
+Route::get('edit-distribution-lines/{id}', [\App\Http\Controllers\system\DistributionController::class, 'edit_distribution_lines'])->name('lines.edit');
+Route::delete('delete-distribution-lines', [\App\Http\Controllers\system\DistributionController::class, 'delete_distribution_lines'])->name('lines.delete');
+Route::get('get-distribution-line', [\App\Http\Controllers\system\DistributionController::class, 'get_distribution_line'])->name('line.get');
+Route::post('update-distribution-line', [\App\Http\Controllers\system\DistributionController::class, 'update_distribution_line'])->name('line.update');
 
 
 Auth::routes();
