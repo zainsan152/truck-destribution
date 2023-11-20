@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,14 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::get('logout', function ()
+{
+    auth()->logout();
+    Session()->flush();
+
+    return Redirect::to('/');
+})->name('logout');
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -29,7 +38,6 @@ Route::post('store-client', [\App\Http\Controllers\system\ClientController::clas
 Route::post('update-client', [\App\Http\Controllers\system\ClientController::class, 'update'])->name('client.update');
 Route::get('show-client', [\App\Http\Controllers\system\ClientController::class, 'show'])->name('client.get');
 Route::delete('delete-client', [\App\Http\Controllers\system\ClientController::class, 'destroy'])->name('client.destroy');
-
 
 Route::get('distributions', [\App\Http\Controllers\system\DistributionController::class, 'index'])->name('distributions');
 Route::get('distribution-details/{id}', [\App\Http\Controllers\system\DistributionController::class, 'details'])->name('distributions.details');

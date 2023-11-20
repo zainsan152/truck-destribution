@@ -147,7 +147,7 @@ class DistributionController extends Controller
             'qty' => $header->qty - $line->qty_line,
         ]);
         $line->delete();
-        return response()->json(['message' => 'Distribution line deleted successfully']);
+        return response()->json(['message' => 'Distribution line deleted successfully', 'header' => $header]);
     }
 
     public function get_distribution_line(Request $request)

@@ -233,9 +233,5 @@
                 $('.toast').toast('hide');
             }, 3000); // 3000 milliseconds (3 seconds)
         });
-
-        $(document).ready(function () {
-
-        });
     </script>
 @endsection

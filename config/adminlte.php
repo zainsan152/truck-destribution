@@ -300,6 +300,14 @@ return [
             'type'         => 'fullscreen-widget',
             'topnav_right' => false,
         ],
+        [
+            'type'       => 'sidebar-custom-link',
+            'text'       => 'Sign Out',
+            'url'        => 'logout',
+            'method'     => 'post',
+            'icon'       => 'fas fa-fw fa-sign-out-alt',
+            'topnav_right' => true,
+        ],
 
         // Sidebar items:
         /*[

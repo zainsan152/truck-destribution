@@ -214,8 +214,8 @@
                         var newRow = table.row.add([
                             data.client.code_client,
                             data.client.name_client,
-                            data.client.adresse,
                             data.client.city.city,
+                            data.client.adresse,
                             '<i class="fas fa-edit edit-client-button" data-client-id="' + data.client.id_client + '" data-client-name="' + data.client.name_client + '" data-city-id="' + data.client.id_city + '" data-client-address="' + data.client.adresse + '"></i>',
                             '<i class="fas fa-trash-alt delete-client-button" data-client-id="' + data.client.id_client + '"></i>'
                         ]).draw().node();
