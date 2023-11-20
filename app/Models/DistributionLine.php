@@ -17,7 +17,7 @@ class DistributionLine extends Model
     {
         parent::boot();
 
-        static::saved(function ($line) {
+        static::updated(function ($line) {
             // Calculate the change in quantity for the line
             $quantityChange = $line->qty_line - $line->getOriginal('qty_line');
             $volumeChange = $line->volume_line - $line->getOriginal('volume_line');
