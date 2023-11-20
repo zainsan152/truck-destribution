@@ -37,7 +37,7 @@
                     </div>
                     <div class="form-group d-flex justify-content-between align-items-center">
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                            <input type="checkbox" class="custom-control-input" id="remember" name="remember">
                             <label class="custom-control-label" for="customSwitch1">Remember me</label>
                         </div>
                         <button type="submit" class="btn btn-primary">Sign-in</button>

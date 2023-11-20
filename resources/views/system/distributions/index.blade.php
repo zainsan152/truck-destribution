@@ -84,14 +84,15 @@
                                 <th>Vlm</th>
                                 <th>Nb de</th>
                                 <th>Nb j pr</th>
-                                <th>Details</th>
+{{--                                <th>Details</th>--}}
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($distributions as $distribution)
                                 <tr id="distributionRow-{{$distribution->id_distribution_header }}"
                                     class="distribution-row">
-                                    <td>{{ str_pad($distribution->code_distribution, 5, '0', STR_PAD_LEFT) }}</td>
+                                    <td><i class="fas fa-info-circle show-distribution-details"
+                                           data-distribution-id="{{$distribution->id_distribution_header}}"></i><span class="ml-2">{{ str_pad($distribution->code_distribution, 5, '0', STR_PAD_LEFT) }}</span></td>
                                     <td>{{$distribution->distributionType->type_distribution}}</td>
                                     <td>{{$distribution->client->name_client}}</td>
                                     <td>{{$distribution->truckCategory->truck_category}}</td>
@@ -102,8 +103,8 @@
                                     <td>{{number_format($distribution->volume)}}</td>
                                     <td>{{$distribution->nbr_delivery_points}}</td>
                                     <td>{{$distribution->nbr_expected_days}}</td>
-                                    <td><i class="fas fa-info-circle show-distribution-details"
-                                           data-distribution-id="{{$distribution->id_distribution_header}}"></i></td>
+                                    {{--<td><i class="fas fa-info-circle show-distribution-details"
+                                           data-distribution-id="{{$distribution->id_distribution_header}}"></i></td>--}}
                                 </tr>
                             @endforeach
                             </tbody>
