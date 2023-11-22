@@ -17,31 +17,19 @@ class DistributionImport implements ToCollection
     /**
      * @param Collection $collection
      */
+
+    protected $missingClients;
+
+    public function __construct(&$missingClients)
+    {
+        $this->missingClients = &$missingClients;
+    }
+
     public function collection(Collection $collections)
     {
         DB::beginTransaction();
 
         try {
-            /*$distributionHeader = DistributionHeader::all()->toArray();
-            dd($distributionHeader);*/
-            // Loop through each sub-array
-            /*foreach ($array as $subArray) {
-                // Check if both keys exist in the sub-array
-                if (array_key_exists('is_mutual', $subArray) && array_key_exists('axe_distribution', $subArray)) {
-                    // Access the values
-                    $isMutual = $subArray['is_mutual'];
-                    $axeDistribution = $subArray['axe_distribution'];
-
-                    // Perform your comparison or checks here
-                    if ($isMutual === $axeDistribution) {
-                        echo "In this sub-array, is_mutual and axe_distribution are equal.\n";
-                    } else {
-                        echo "In this sub-array, is_mutual and axe_distribution are not equal.\n";
-                    }
-                } else {
-                    echo "One or both keys are missing in a sub-array.\n";
-                }
-            }*/
             // Remove the first row and use it as header
             $headers = $collections->pull(0);
 
@@ -67,46 +55,50 @@ class DistributionImport implements ToCollection
                 if (isset($collection['Type camion']))
                     $truck_category = TruckCategory::where('truck_category', 'Camion')->first();
                 // Detect if "Mutualisé ou NN" value has changed (and is not null for the first row)
-                if (!$existingHeader/*&& $lastMutualiseValue !== $collection['Mutualisé ou NN']*/) {
-                    // Create a new DistributionHeader
-                    $existingHeader = DistributionHeader::create([
-                        'qty' => $collection['Total pièce'],
-                        'volume' => $collection['Volume total chargé'],
-                        'nbr_delivery_points' => $collection['Nbr Point de livraison'],
-                        'nbr_expected_days' => $collection['Nbre Jours prévu '],
-                        'comments' => $collection['Commentaire'] ?? '',
-                        'distance' => $collection['Kilométrage'],
-                        'is_mutual' => $collection['Mutualisé ou NN'],
-                        'id_client' => $client->id_client,
-                        'id_truck_category' => $truck_category->id,
-                        'id_city' => $city->id_city,
-                        'date_order' => intval($collection['Date Commande'] - 25569) * 86400,
+                if ($client) {
+                    if (!$existingHeader/*&& $lastMutualiseValue !== $collection['Mutualisé ou NN']*/) {
+                        // Create a new DistributionHeader
+                        $existingHeader = DistributionHeader::create([
+                            'qty' => $collection['Total pièce'],
+                            'volume' => $collection['Volume total chargé'],
+                            'nbr_delivery_points' => $collection['Nbr Point de livraison'],
+                            'nbr_expected_days' => $collection['Nbre Jours prévu '],
+                            'comments' => $collection['Commentaire'] ?? '',
+                            'distance' => $collection['Kilométrage'],
+                            'is_mutual' => $collection['Mutualisé ou NN'],
+                            'id_client' => $client->id_client,
+                            'id_truck_category' => $truck_category->id,
+                            'id_city' => $city->id_city,
+                            'date_order' => intval($collection['Date Commande'] - 25569) * 86400,
 //                        'date_execution' => '2023-11-01',
-                        'code_distribution' => ++$i,
-                        'id_type_distribution' => 1,
-                        'axe_distribution' => $collection['Axe '],
+                            'code_distribution' => ++$i,
+                            'id_type_distribution' => 1,
+                            'axe_distribution' => $collection['Axe '],
 //                        'id_driver' => 1,
 //                        'id_vehicule' => 1,
 //                        'date_delivery' => '2023-11-01',
-                        'id_status_distribution' => 1,
-                        'createdby' => Auth::id(),
-                        'modifiedby' => Auth::id(),
-                    ]);
+                            'id_status_distribution' => 1,
+                            'createdby' => Auth::id(),
+                            'modifiedby' => Auth::id(),
+                        ]);
 
-                    // Adding lines in the db
-                    foreach ($collections as $lineItem) {
-                        if ($lineItem['Mutualisé ou NN'] == $collection['Mutualisé ou NN'])
-                            DistributionLine::create([
-                                'id_distribution_header' => $existingHeader->id_distribution_header,
-                                'num_bl' => $lineItem['N°BL'],
-                                'name_delivery' => $lineItem['Nom livraison 1'],
-                                'qty_line' => $lineItem['Quantités à préparer'],
-                                'volume_line' => $lineItem['Volume commande'],
-                                'line_order' => $lineItem['Ordre Livraison'],
-                            ]);
-                    }
-                    // Update lastMutualiseValue to the current value
+                        // Adding lines in the db
+                        foreach ($collections as $lineItem) {
+                            if ($lineItem['Mutualisé ou NN'] == $collection['Mutualisé ou NN'])
+                                DistributionLine::create([
+                                    'id_distribution_header' => $existingHeader->id_distribution_header,
+                                    'num_bl' => $lineItem['N°BL'],
+                                    'name_delivery' => $lineItem['Nom livraison 1'],
+                                    'qty_line' => $lineItem['Quantités à préparer'],
+                                    'volume_line' => $lineItem['Volume commande'],
+                                    'line_order' => $lineItem['Ordre Livraison'],
+                                ]);
+                        }
+                        // Update lastMutualiseValue to the current value
 //                    $lastMutualiseValue = $collection['Mutualisé ou NN'];
+                    }
+                } else {
+                    $this->missingClients[] = $collection['Mutualisé ou NN'];
                 }
             }
             DB::commit();

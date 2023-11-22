@@ -59,6 +59,14 @@
                                 </button>
                             </form>
                         </div>
+                        @if(session('missing_clients'))
+                                <ul style="color: #8b2512; font-weight: 400; font-size: 1.1rem; padding: 0.75rem">
+                                    @foreach(session('missing_clients') as $missingClient)
+                                        <p>* Le client {{ $missingClient }} n'existe pas dans la base des clients!</p>
+                                    @endforeach
+                                </ul>
+                        @endif
+
                     </div>
                 </div>
             </div>

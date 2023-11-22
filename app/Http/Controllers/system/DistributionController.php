@@ -36,7 +36,8 @@ class DistributionController extends Controller
             return $value !== null;
         });
 
-        $distributions = DistributionHeader::all();
+        $header_ids = DB::table('mapping_driver_vehicle')->pluck('id_distribution_header')->toArray();
+        $distributions = DistributionHeader::whereNotIn('id_distribution_header', $header_ids)->get();
 
         // Get all drivers excluding those with IDs in the distribution table
         $drivers = Driver::whereNotIn('id_driver', $filteredDistributionDrivers)->get();
@@ -49,11 +50,17 @@ class DistributionController extends Controller
     public function import(Request $request)
     {
         $file = $request->file('file');
+        $missingClients = [];
 
         // Check if a file was uploaded
         if ($file) {
             // Perform the import logic using Maatwebsite/Laravel-Excel
-            Excel::import(new DistributionImport, $file);
+            Excel::import(new DistributionImport($missingClients), $file);
+            // Check if there are missing clients
+            if (!empty($missingClients)) {
+                // You can use session to store the missing clients and display them in your Blade view
+                session()->flash('missing_clients', array_unique($missingClients));
+            }
 
             // Redirect back with a success message
             return redirect()->route('distributions')->with('success', 'Data imported successfully.');
