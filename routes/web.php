@@ -22,11 +22,24 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('logout', function ()
-{
+Route::get('logout', function () {
+    // Retrieve the currently authenticated user
+    $user = auth()->user();
+
+    // Check if the user is logged in
+    if ($user) {
+        // Reset the remember_token in the database
+        $user->remember_token = null;
+        $user->save();
+    }
+
+    // Perform the actual logout
     auth()->logout();
+
+    // Flush the session
     Session()->flush();
 
+    // Redirect to the root route
     return Redirect::to('/');
 })->name('logout');
 

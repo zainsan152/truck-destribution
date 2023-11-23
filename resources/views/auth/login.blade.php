@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
@@ -38,7 +39,7 @@
                     <div class="form-group d-flex justify-content-between align-items-center">
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="remember" name="remember">
-                            <label class="custom-control-label" for="customSwitch1">Remember me</label>
+                            <label class="custom-control-label" for="remember">Remember me</label>
                         </div>
                         <button type="submit" class="btn btn-primary">Sign-in</button>
                     </div>
@@ -52,3 +53,17 @@
 </body>
 
 </html>
+
+<script>
+    $(document).ready(function(){
+        $('#remember').change(function() {
+            if($(this).is(':checked')) {
+                // Toggle is on
+                $(this).val(true);
+            } else {
+                // Toggle is off
+                $(this).val(false);
+            }
+        });
+    });
+</script>
