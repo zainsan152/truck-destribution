@@ -117,6 +117,13 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'query_log' => [
+            'driver' => 'daily', // You can use 'daily' or 'single' or any other supported driver
+            'path' => storage_path('logs/query.log'), // Define the log file path
+            'level' => 'debug',
+            'days' => 14,
+        ],
     ],
 
 ];

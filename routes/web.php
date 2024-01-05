@@ -52,7 +52,11 @@ Route::post('update-client', [\App\Http\Controllers\system\ClientController::cla
 Route::get('show-client', [\App\Http\Controllers\system\ClientController::class, 'show'])->name('client.get');
 Route::delete('delete-client', [\App\Http\Controllers\system\ClientController::class, 'destroy'])->name('client.destroy');
 
+Route::get('ots', [\App\Http\Controllers\system\OtController::class, 'index'])->name('ots');
+//Route::post('ots', [\App\Http\Controllers\system\DistributionController::class, 'planify_distribution'])->name('distribution.planify');
+
 Route::get('distributions', [\App\Http\Controllers\system\DistributionController::class, 'index'])->name('distributions');
+Route::get('distributionsplanifiees', [\App\Http\Controllers\system\DistributionController::class, 'distributionsplanifiees'])->name('distributionsplanifiees');
 Route::get('distribution-details/{id}', [\App\Http\Controllers\system\DistributionController::class, 'details'])->name('distributions.details');
 Route::post('import-distributions', [\App\Http\Controllers\system\DistributionController::class, 'import'])->name('distributions.import');
 Route::get('planning', [\App\Http\Controllers\system\DistributionController::class, 'planning'])->name('planning');
@@ -62,6 +66,7 @@ Route::get('edit-distribution-lines/{id}', [\App\Http\Controllers\system\Distrib
 Route::delete('delete-distribution-lines', [\App\Http\Controllers\system\DistributionController::class, 'delete_distribution_lines'])->name('lines.delete');
 Route::get('get-distribution-line', [\App\Http\Controllers\system\DistributionController::class, 'get_distribution_line'])->name('line.get');
 Route::post('update-distribution-line', [\App\Http\Controllers\system\DistributionController::class, 'update_distribution_line'])->name('line.update');
+
 
 
 Auth::routes();

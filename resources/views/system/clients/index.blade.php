@@ -29,7 +29,7 @@
                 <div class="card">
                     <div class="card-header" style="display: flex; align-items: center;">
                         <h3 class="card-title">Liste des clients</h3>
-                        <button type="button" class="btn btn-primary" id="openModalBtn" style="margin-left: auto;">Add
+                        <button type="button" class="btn btn-primary" id="openModalBtn" style="margin-left: auto;">Ajouter
                             Client
                         </button>
                     </div>
@@ -78,7 +78,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="clientModalTitle">Add Client</h5>
+                    <h5 class="modal-title" id="clientModalTitle">Ajouter Client</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -99,7 +99,7 @@
                                 <div class="form-group">
                                     <label for="city_id">Ville *</label>
                                     <select name="city_id" id="city_id" class="form-control">
-                                        <option value="">Select value</option>
+                                        <option value="">Sélectionner une valeur</option>
                                         @foreach($cities as $city)
                                             <option value="{{$city->id_city}}">{{$city->city}}</option>
                                         @endforeach
@@ -116,7 +116,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary" style="float: right;" id="clientActionButton">
-                            Submit
+                            Valider
                         </button>
                     </form>
 
@@ -129,8 +129,20 @@
 @section('js')
     <script>
         var table = $('#clients-table').DataTable({
-            responsive: true,
-        });
+responsive: true,
+language: {
+    "emptyTable": "Aucune donnée disponible",
+"info": "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+"infoEmpty": "Affichage de 0 à 0 sur 0 entrées",
+"infoFiltered": "(filtrées depuis un total de _MAX_ entrées)",
+"lengthMenu": "Afficher _MENU_ entrées",
+"paginate": {
+        "first": "Première",
+        "last": "Dernière",
+        "next": "Suivante",
+        "previous": "Précédente"
+    },
+}});
         // Get the CSRF token value from the meta tag in your HTML
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
@@ -230,9 +242,9 @@
                     // $('#clientModal').modal('hide');
                     $(document).Toasts('create', {
                         class: 'bg-danger',
-                        title: 'Required fields',
+                        title: 'Champs obligatoires!',
                         subtitle: false,
-                        body: 'Please choose some data for required fields'
+                        body: 'Merci de remplir les champs obligatoires'
                     })
                 }
             });
@@ -255,12 +267,12 @@
             // Confirm the deletion with the user (optional)
             // Send a DELETE request to delete the client
             Swal.fire({
-                title: 'Are you sure?',
-                text: 'You won\'t be able to revert this!',
+                title: 'Etes-vous sûr?',
+                text: 'Vous ne pourrez pas revenir en arrière!',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel',
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Non',
             }).then((result) => {
                 if (result.value) {
                     $.ajax({

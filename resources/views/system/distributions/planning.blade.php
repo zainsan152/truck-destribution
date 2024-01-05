@@ -47,7 +47,7 @@
                             @elseif ($category->truck_category === 'Camion')
                                 <i class="fa-solid fa-truck-fast fa-3x mb-3"></i>
                             @endif
-                            <h5 class="card-title">Available Trucks ({{$category->truck_category}})
+                            <h5 class="card-title">Véhicules disponibles ({{$category->truck_category}})
                                 : {{$category->truck_count}}</h5>
                         </div>
                     </div>
@@ -102,17 +102,17 @@
 @section('js')
     <script>
         $(document).ready(function () {
-            $("td:contains('Pending')").css(
+            $("td:contains('Planifié')").css(
                 {
                     "background-color": "skyblue",
                     "border-radius": "10px" // You can adjust the radius to your preference
                 });
-            $("TD:contains('Ongoing')").css(
+            $("TD:contains('En cours')").css(
                 {
                     "background-color": "yellow",
                     "border-radius": "10px"
                 });
-            $("TD:contains('Done')").css(
+            $("TD:contains('Clôturé')").css(
                 {
                     "background-color": "lightgreen",
                     "border-radius": "10px"

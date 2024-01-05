@@ -14,9 +14,10 @@ class CitySeeder extends Seeder
     public function run(): void
     {
         $cities = [
-            ['city' => 'City 1'],
-            ['city' => 'City 2'],
-            ['city' => 'City 3'],
+            ['city' => 'Casablanca'],
+            ['city' => 'Marrakech'],
+            ['city' => 'Rabat'],
+			['city' => 'Tanger'],
         ];
 
         DB::table('city')->insert($cities);

@@ -16,4 +16,4 @@
 <div class="header">
     <!-- header content here -->
 </div>
-{{--<img src="https://picsum.photos/id/237/200/40" alt="Logo" class="logo">--}}
+{{-- <!--<img src="https://picsum.photos/id/237/200/40" alt="Logo" class="logo">--> --}}

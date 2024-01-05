@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'Dashboard')
+@section('title', 'Accueil')
 <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 <style>
     a {
@@ -95,7 +95,7 @@
                     <div class="card h-100">
                         <div class="card-body text-center d-flex flex-column justify-content-center">
                             <i class="fas fa-cog fa-3x mb-3"></i>
-                            <h5 class="card-title">Parametrage</h5>
+                            <h5 class="card-title">Paramétrage</h5>
                         </div>
                     </div>
                 </a>

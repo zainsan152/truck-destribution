@@ -108,7 +108,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary" style="float: right;" id="lineActionButton">
-                            Edit
+                            Mettre à jour
                         </button>
                     </form>
 
@@ -138,12 +138,12 @@
 
             // Confirm the deletion with the user (optional)
             Swal.fire({
-                title: 'Are you sure?',
-                text: 'You won\'t be able to revert this!',
+                title: 'Etes-vous sûr?',
+                text: 'Vous ne pourrez pas revenir en arrière!',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel',
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Non',
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
@@ -222,9 +222,9 @@
                 error: function (xhr, status, error) {
                     $(document).Toasts('create', {
                         class: 'bg-danger',
-                        title: 'Required fields',
+                        title: 'Champs obligatoires!',
                         subtitle: false,
-                        body: 'Please choose some data for required fields'
+                        body: 'Merci de remplir les champs obligatoires'
                     })
                 }
             });

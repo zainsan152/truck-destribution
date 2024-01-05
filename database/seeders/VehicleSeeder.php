@@ -15,7 +15,6 @@ class VehicleSeeder extends Seeder
     {
         $vehicles = [
             ['marque_vehicle' => 'Brand A', 'modele_vehicle' => 'Model X', 'immatriculation' => 'ABC123', 'date_acquisition' => '2023-11-01', 'id_truck_category' => 1],
-            ['marque_vehicle' => 'Brand AA', 'modele_vehicle' => 'Model AA', 'immatriculation' => 'ABC123', 'date_acquisition' => '2023-11-01', 'id_truck_category' => 1],
             ['marque_vehicle' => 'Brand B', 'modele_vehicle' => 'Model Y', 'immatriculation' => 'DEF456', 'date_acquisition' => '2023-11-01', 'id_truck_category' => 2],
             ['marque_vehicle' => 'Brand C', 'modele_vehicle' => 'Model Z', 'immatriculation' => 'GHI789', 'date_acquisition' => '2023-11-01', 'id_truck_category' => 3],
             ['marque_vehicle' => 'Brand D', 'modele_vehicle' => 'Model D', 'immatriculation' => 'GHI789', 'date_acquisition' => '2023-11-01', 'id_truck_category' => 3],

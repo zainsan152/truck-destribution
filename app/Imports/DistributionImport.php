@@ -11,6 +11,8 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Illuminate\Support\Facades\DB;
 use App\Models\DistributionLine;
 use App\Models\DistributionHeader;
+use DateTime;
+
 
 class DistributionImport implements ToCollection
 {
@@ -57,6 +59,17 @@ class DistributionImport implements ToCollection
                 // Detect if "Mutualisé ou NN" value has changed (and is not null for the first row)
                 if ($client) {
                     if (!$existingHeader/*&& $lastMutualiseValue !== $collection['Mutualisé ou NN']*/) {
+                        
+                        //$dateOrder = new DateTime($collection['Date Commande']);
+                        $excelDate = $collection['Date Commande'];
+                        // Excel stores dates as the number of days since 1900-01-01 (Excel's base date)
+                        $unixTimestamp = ($excelDate - 25569) * 86400; // Convert Excel date to Unix timestamp
+
+                        $dateOrder = new DateTime();
+                        $dateOrder->setTimestamp($unixTimestamp);
+
+                        $formattedDateOrder = $dateOrder->format('Y-m-d'); // Format the date as per your database field's format
+                                      
                         // Create a new DistributionHeader
                         $existingHeader = DistributionHeader::create([
                             'qty' => $collection['Total pièce'],
@@ -69,7 +82,12 @@ class DistributionImport implements ToCollection
                             'id_client' => $client->id_client,
                             'id_truck_category' => $truck_category->id,
                             'id_city' => $city->id_city,
-                            'date_order' => intval($collection['Date Commande'] - 25569) * 86400,
+                            //$table->dateTime('start_at');
+                            
+                            'date_order' => $formattedDateOrder,
+                            //'date_order' => $dateOrder->format('Y-m-d'), // Format the DateTime object as per your database field's format
+                            //'date_order' => dateTime($collection['Date Commande']),
+                            //'date_order' => intval($collection['Date Commande'] - 25569) * 86400,
 //                        'date_execution' => '2023-11-01',
                             'code_distribution' => ++$i,
                             'id_type_distribution' => 1,

@@ -64,7 +64,7 @@ class ClientController extends Controller
             $client = Client::find($request->client_id);
 
             if (!$client) {
-                return response()->json(['error' => 'Client not found'], 404);
+                return response()->json(['error' => 'Client non trouvé'], 404);
             }
 
             // Update the client attributes

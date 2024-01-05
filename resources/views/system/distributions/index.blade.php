@@ -42,7 +42,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Ajoutre une liste de distribution</h3>
+                        <h3 class="card-title">Ajouter les distributions</h3>
                     </div>
                     <div class="card-body">
                         <div class="col-md-6">
@@ -50,12 +50,11 @@
                                   enctype="multipart/form-data" class="form-inline">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="file">Add a file</label>
+                                    <label for="file">Ajouter un fichier</label>
                                     <input type="file" name="file" id="file" class="form-control-file">
                                 </div>
                                 <button type="submit" class="btn btn-primary mt-3"
-                                        id="fileBtn">Import
-                                    Distributions
+                                        id="fileBtn">Importer des distributions
                                 </button>
                             </form>
                         </div>
@@ -75,7 +74,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header" style="display: flex; align-items: center;">
-                        <h3 class="card-title">List of distributions</h3>
+                        <h3 class="card-title">Liste des distributions créées</h3>
                     </div>
                     <div class="card-body">
                         <table id="distributions-table" class="table table-bordered table-striped">
@@ -161,14 +160,14 @@
                         <input type="hidden" name="distribution_id" id="distribution_id">
 
                         <div class="form-group">
-                            <label for="execution-date">Exécution Date *</label>
+                            <label for="execution-date">Date d'exécution*</label>
                             <input type="date" class="form-control" id="execution_date" name="execution_date"
                                    placeholder="17/12/2022">
                         </div>
                         <div class="form-group">
-                            <label for="driver-info">Driver *</label>
+                            <label for="driver-info">Chauffeur *</label>
                             <select name="driver_id" id="driver_id" class="form-control">
-                                <option value="">Select value</option>
+                                <option value="">Sélectionner une valeur</option>
                                 @foreach($drivers as $driver)
                                     <option value="{{$driver->id_driver}}">
                                         {{$driver->firstname}} {{$driver->lastname}}
@@ -177,9 +176,9 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="truck-info">Truck *</label>
+                            <label for="truck-info">Véhicule *</label>
                             <select name="vehicle_id" id="vehicle_id" class="form-control">
-                                <option value="">Select value</option>
+                                <option value="">Sélectionner une valeur</option>
                                 @foreach($vehicles as $vehicle)
                                     <option value="{{$vehicle->id_vehicle}}">
                                         {{$vehicle->marque_vehicle}} {{$vehicle->modele_vehicle}} {{$vehicle->immatriculation}}
@@ -237,7 +236,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary" style="float: right;" id="lineActionButton">
-                            Edit
+                            Mettre à jour
                         </button>
                     </form>
 
@@ -252,8 +251,21 @@
     <script>
         var canShowModal = false;
         var table = $('#distributions-table').DataTable({
-            responsive: true,
-        });
+responsive: true,
+language: {
+"emptyTable": "Aucune donnée disponible",
+"info": "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+"infoEmpty": "Affichage de 0 à 0 sur 0 entrées",
+"infoFiltered": "(filtrées depuis un total de _MAX_ entrées)",
+"lengthMenu": "Afficher _MENU_ entrées",
+"paginate": {
+        "first": "Première",
+        "last": "Dernière",
+        "next": "Suivante",
+        "previous": "Précédente"
+    },
+}
+});
 
         // Get the CSRF token value from the meta tag in your HTML
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -274,9 +286,9 @@
                 // No file selected, display an error message or perform any desired action
                 $(document).Toasts('create', {
                     class: 'bg-danger',
-                    title: 'Required file',
+                    title: 'Fichier obligatoire',
                     subtitle: false,
-                    body: 'Please select a file'
+                    body: 'Merci de sélectionner un fichier'
                 })
                 event.preventDefault(); // Prevent form submission
             }
@@ -299,14 +311,14 @@
                     // Populate the modal with the response data
                     var distributionDetails = response.distribution;
                     var modalTitle = $('#distributionModal .modal-title');
-                    modalTitle.text('Details Distribution Ship00' + distributionDetails.code_distribution + ' - Creee');
+                    modalTitle.text('Details Distribution Ship00' + distributionDetails.code_distribution);
 
                     // Create an HTML string for additional details
-                    var additionalDetailsHtml = '<p><b>Client: </b>' + distributionDetails.is_mutual + '</p>';
-                    additionalDetailsHtml += '<p><b>Type: </b>' + distributionDetails.distribution_type.type_distribution + '</p>';
-                    additionalDetailsHtml += '<p><b>AXE: </b>' + distributionDetails.axe_distribution + '</p>';
-                    additionalDetailsHtml += '<p><b>Quantite: </b>' + distributionDetails.qty + '</p>';
-                    additionalDetailsHtml += '<p><b>Volume: </b>' + (distributionDetails.volume).toLocaleString() + '</p>';
+                    var additionalDetailsHtml = '<p name="client_id_ajax"><b>Client: </b>' + distributionDetails.is_mutual + '</p>';
+                    additionalDetailsHtml += '<p name="id_type_ot_ajax"><b>Type: </b>' + distributionDetails.distribution_type.type_distribution + '</p>';
+                    additionalDetailsHtml += '<p name="axe_distribution_ajax"><b>AXE: </b>' + distributionDetails.axe_distribution + '</p>';
+                    additionalDetailsHtml += '<p name="qty_ajax"><b>Quantite: </b>' + distributionDetails.qty + '</p>';
+                    additionalDetailsHtml += '<p name="volume_ajax"><b>Volume: </b>' + distributionDetails.volume + '</p>';
                     additionalDetailsHtml += '<hr>';
                     // Add more details as needed
 
@@ -347,7 +359,20 @@
                     modalBody.append(additionalDetailsHtml);
                     modalBody.append(tableHtml);
                     var lineTable = $('#lines-table').DataTable({
-                        responsive: true
+                        responsive: true,
+                        language: {
+"emptyTable": "Aucune donnée disponible",
+"info": "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+"infoEmpty": "Affichage de 0 à 0 sur 0 entrées",
+"infoFiltered": "(filtrées depuis un total de _MAX_ entrées)",
+"lengthMenu": "Afficher _MENU_ entrées",
+"paginate": {
+        "first": "Première",
+        "last": "Dernière",
+        "next": "Suivante",
+        "previous": "Précédente"
+    },
+}   
                     });
 
                     // Show the modal
@@ -362,7 +387,7 @@
                     // $("#edit-lines-btn").attr("href", url);
                     $('#distribution_id').val(distributionId);
                     var planifierModalTitle = $('#planifier-modal .modal-title');
-                    planifierModalTitle.text('Details Distribution ' + (distributionDetails.code_distribution).padStart(5, '0') + ' - Planifi la distribution');
+                    planifierModalTitle.text('Details Distribution ' + (distributionDetails.code_distribution).padStart(5, '0') + ' - Planifier la distribution');
                 },
                 error: function (xhr, status, error) {
                     console.error('Ajax request error:', error);
@@ -384,14 +409,35 @@
         $("#planifier-btn-submit").click(function (e) {
             e.preventDefault(); // Prevent the default form submission
 
+            /*var arr_volume = $("p[name='volume_ajax']").text().split(':');
+            var arr_qty = $("p[name='qty_ajax']").text().split(':');
+            var arr_client = $("p[name='client_id_ajax']").text().split(':');
+            var arr_ottype = $("p[name='id_type_ot_ajax']").text().split(':');
+            var arr_axe = $("p[name='axe_distribution_ajax']").text().split(':');*/
+
             // Get form data
             var formData = {
                 'execution_date': $('#execution_date').val(),
                 'driver_id': $('#driver_id').val(),
                 'vehicle_id': $('#vehicle_id').val(),
-                'distribution_id': $('#distribution_id').val()
+                'distribution_id': $('#distribution_id').val(),
+                /*'client_id': arr_client[1],
+                'id_type_ot': arr_ottype[1],
+                'axe_distribution': arr_axe[1],
+                'qty': parseFloat(arr_qty[1]),
+                'volume': parseFloat(arr_volume[1]),*/
+
                 // Add other form fields here if needed
             };
+
+            /*Swal.fire({
+                title: 'volume',
+                text: parseFloat(arr_volume[1]),
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Non',
+            });*/
 
             // Send an AJAX request to your server
             $.ajax({
@@ -419,9 +465,10 @@
                     } else {
                         $(document).Toasts('create', {
                             class: 'bg-danger',
-                            title: 'Required fields',
+                            title: 'Champs obligatoires!',
                             subtitle: false,
-                            body: 'Please choose some data for required fields'
+                            body: xhr.responseJSON.message
+                            //body: 'Merci de remplir les champs obligatoires'
                         })
                     }
                 }
@@ -437,7 +484,7 @@
             // Confirm the deletion with the user (optional)
             // Send a DELETE request to delete the client
             Swal.fire({
-                title: 'Are you sure?',
+                title: 'Etes-vous sûr?',
                 text: 'Voulez-vous supprimer cette distribution ?',
                 icon: 'warning',
                 showCancelButton: true,
@@ -474,12 +521,12 @@
 
             // Confirm the deletion with the user (optional)
             Swal.fire({
-                title: 'Are you sure?',
-                text: 'You won\'t be able to revert this!',
+                title: 'Etes vous sûr?',
+                text: 'Vous ne pourrez pas revenir en arrière!',
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel',
+                confirmButtonText: 'Oui',
+                cancelButtonText: 'Non',
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
@@ -560,9 +607,9 @@
                 error: function (xhr, status, error) {
                     $(document).Toasts('create', {
                         class: 'bg-danger',
-                        title: 'Required fields',
+                        title: 'Champs obligatoires!',
                         subtitle: false,
-                        body: 'Please choose some data for required fields'
+                        body: 'Merci de remplir les champs obligatoires'
                     })
                 }
             });

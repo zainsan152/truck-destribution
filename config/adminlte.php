@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo' => '<b>Logo</b>',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b>TMS</b>',
+    'logo_img' => 'logo_tms_nobg.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'Admin Logo',
+    'logo_img_alt' => 'TMS Logo',
 
     /*
     |--------------------------------------------------------------------------
@@ -86,8 +86,8 @@ return [
     'auth_logo' => [
         'enabled' => false,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-            'alt' => 'Auth Logo',
+            'path' => 'logo_tms_nobg.png',
+            'alt' => 'TMS Logo',
             'class' => '',
             'width' => 50,
             'height' => 50,
@@ -109,8 +109,8 @@ return [
     'preloader' => [
         'enabled' => true,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-            'alt' => 'AdminLTE Preloader Image',
+            'path' => 'logo_tms_nobg.png',
+            'alt' => 'TMS Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,
             'height' => 60,
@@ -302,7 +302,7 @@ return [
         ],
         [
             'type'       => 'sidebar-custom-link',
-            'text'       => 'Sign Out',
+            'text'       => 'Se déconnecter',
             'url'        => 'logout',
             'method'     => 'post',
             'icon'       => 'fas fa-fw fa-sign-out-alt',
@@ -338,7 +338,7 @@ return [
             'icon' => 'fas fa-fw fa-lock',
         ],*/
         [
-            'text' => 'Dashboard',
+            'text' => 'Accueil',
             'url'  => 'home',
             'icon' => 'false',
         ],
@@ -356,6 +356,28 @@ return [
             'text' => 'Gestion des OTs',
             'url'  => '#',
             'icon' => false,
+            'submenu' => [
+                [
+                    'text' => 'Planifiée',
+                    'url'  => '/ots',
+                    'icon' => 'fas fa-minus',
+                ],
+                [
+                    'text' => 'En cours',
+                    'url'  => '#',
+                    'icon' => 'fas fa-minus',
+                ],
+                [
+                    'text' => 'Cloturée',
+                    'url'  => '#',
+                    'icon' => 'fas fa-minus',
+                ],
+                [
+                    'text' => 'Tous',
+                    'url'  => '#',
+                    'icon' => 'fas fa-minus',
+                ],
+        ]
         ],
         [
             'text' => 'POD/IOD',
@@ -363,7 +385,7 @@ return [
             'icon' => false,
         ],
         [
-            'text' => 'Gestion des OTs',
+            'text' => 'Gestion des interventions',
             'url'  => '#',
             'icon' => false,
         ],
@@ -377,13 +399,13 @@ return [
             'icon' => false,
             'submenu' => [
                 [
-                    'text' => 'Creee',
+                    'text' => 'Créée',
                     'url'  => '/distributions',
                     'icon' => 'fas fa-minus',
                 ],
                 [
-                    'text' => 'Planifiee',
-                    'url'  => '#',
+                    'text' => 'Planifiée',
+                    'url'  => '/distributionsplanifiees',
                     'icon' => 'fas fa-minus',
                 ],
                 [
@@ -392,7 +414,7 @@ return [
                     'icon' => 'fas fa-minus',
                 ],
                 [
-                    'text' => 'Cloturee',
+                    'text' => 'Cloturée',
                     'url'  => '#',
                     'icon' => 'fas fa-minus',
                 ],
@@ -405,7 +427,7 @@ return [
 
 //            'icon' => 'fas fa-fw fa-lock',
         ],
-        [
+        /*[
             'text' => 'Autre 1',
             'url'  => '#',
             'icon' => false,
@@ -414,9 +436,9 @@ return [
             'text' => 'Autre 2',
             'url'  => '#',
             'icon' => false,
-        ],
+        ],*/
         [
-            'text' => 'Parametrage',
+            'text' => 'Paramétrage',
             'url'  => '#',
             'icon' => false,
             'submenu' => [

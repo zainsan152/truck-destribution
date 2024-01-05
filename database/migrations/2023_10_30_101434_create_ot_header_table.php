@@ -11,17 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('distribution_header', function (Blueprint $table) {
-            $table->id('id_distribution_header');
+        Schema::create('ot_header', function (Blueprint $table) {
+            $table->id('id_ot_header');
             $table->unsignedBigInteger('id_client');
-            $table->string('code_distribution')->nullable();
-            $table->unsignedBigInteger('id_type_distribution');
-            $table->string('axe_distribution')->nullable();
+            $table->string('numero_ot')->nullable();
+            $table->unsignedBigInteger('id_type_ot');
+            $table->string('reference_ot')->nullable();
+			$table->string('reference_company')->nullable();			
             $table->double('volume')->nullable();
             $table->integer('qty')->nullable();
             $table->integer('nbr_delivery_points');
             $table->integer('nbr_expected_days');
-            $table->string('comments')->nullable();
+			$table->date('requested_execution_date')->nullable();
+			$table->date('execution_date')->nullable();
+			$table->date('ot_closing_date')->nullable();
+			$table->string('pod')->nullable();
+			$table->double('estimated_days_count')->nullable();			
+            $table->string('comments')->nullable();		
             $table->float('distance')->nullable();
             $table->unsignedBigInteger('id_city');
             $table->string('is_mutual');
@@ -31,7 +37,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_driver')->nullable();
             $table->unsignedBigInteger('id_vehicule')->nullable();
             $table->date('date_delivery')->nullable();
-            $table->unsignedBigInteger('id_status_distribution');
+            $table->unsignedBigInteger('ot_status');
             $table->unsignedBigInteger('createdby');
             $table->integer('modifiedby');
             $table->timestamps();
@@ -43,6 +49,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('distribution_header');
+        Schema::dropIfExists('ot_header');
     }
 };

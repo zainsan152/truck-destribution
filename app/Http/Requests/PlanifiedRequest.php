@@ -26,6 +26,11 @@ class PlanifiedRequest extends FormRequest
             'execution_date' => 'required',
             'driver_id' => 'required|integer',
             'vehicle_id' => 'required|integer',
+            /*'client_id' => 'nullable|string',
+            'id_type_ot' => 'nullable|string',
+            'volume' => 'nullable|regex:/^\d+(\.\d{1,2})?$/',
+            'qty' => 'nullable|regex:/^\d+(\.\d{1,2})?$/',
+            'axe_distribution' => 'nullable|string',*/
         ];
     }
 }
