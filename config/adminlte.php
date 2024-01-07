@@ -391,8 +391,34 @@ return [
         ],
         [
             'text' => 'Arrivage',
-            'url'  => '#',
             'icon' => false,
+            'submenu' => [
+                [
+                    'text' => 'Previsionnel',
+                    'url'  => '/distributions',
+                    'icon' => 'fas fa-minus',
+                ],
+                [
+                    'text' => 'Main levee',
+                    'url'  => '/distributions',
+                    'icon' => 'fas fa-minus',
+                ],
+                [
+                    'text' => 'Taxation',
+                    'url'  => '/distributions',
+                    'icon' => 'fas fa-minus',
+                ],
+                [
+                    'text' => 'OT',
+                    'url'  => '/distributions',
+                    'icon' => 'fas fa-minus',
+                ],
+                [
+                    'text' => 'Tous',
+                    'url'  => '/distributions',
+                    'icon' => 'fas fa-minus',
+                ],
+            ]
         ],
         [
             'text' => 'Distribution',
