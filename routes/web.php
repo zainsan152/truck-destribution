@@ -68,5 +68,7 @@ Route::get('get-distribution-line', [\App\Http\Controllers\system\DistributionCo
 Route::post('update-distribution-line', [\App\Http\Controllers\system\DistributionController::class, 'update_distribution_line'])->name('line.update');
 
 
+Route::get('arrivals', [\App\Http\Controllers\system\ArrivalController::class, 'index'])->name('arrivals');
+Route::post('import-arrivals', [\App\Http\Controllers\system\ArrivalController::class, 'import'])->name('arrivals.import');
 
 Auth::routes();

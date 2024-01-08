@@ -21,4 +21,9 @@ class City extends Model
     {
         return $this->belongsTo(DistributionHeader::class, 'id_city');
     }
+
+    public function arrivals()
+    {
+        $this->hasMany(Arrival::class);
+    }
 }

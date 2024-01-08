@@ -12,6 +12,6 @@ class ArrivalType extends Model
 
     public function arrivals()
     {
-        $this->hasMany(Arrival::class);
+        return $this->hasMany(Arrival::class);
     }
 }

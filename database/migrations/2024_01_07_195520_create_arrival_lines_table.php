@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('arrival_lines', function (Blueprint $table) {
             $table->id();
             $table->string('numero');
+            $table->unsignedBigInteger('arrival_id');
             $table->unsignedBigInteger('arrival_line_type_id');
             $table->string('nb_de_pieces');
             $table->string('poids')->nullable();

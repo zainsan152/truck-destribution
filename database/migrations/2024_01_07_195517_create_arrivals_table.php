@@ -20,19 +20,19 @@ return new class extends Migration
             $table->string('dossier_client')->nullable();
             $table->string('shipping_compagnie');
             $table->unsignedBigInteger('city_id'); //pod
-            $table->string('eta');
-            $table->string('ata')->nullable();
-            $table->integer('nombre');
+            $table->date('eta');
+            $table->date('ata')->nullable();
+//            $table->integer('nombre');
             $table->string('lieu_de_chargement');
             $table->string('lieu_de_dechargement');
-            $table->string('lieu_de_restitution');
-            $table->string('date_bae_Previsionnelle')->nullable();
-            $table->string('date_magasinage')->nullable();
-            $table->string('date_surestaries')->nullable();
-            $table->string('date_remise')->nullable(); // "Créé" to “Main levee”.
-            $table->string('date_taxation')->nullable(); // main levee to taxation
+            $table->string('lieu_de_restitution')->nullable();
+            $table->date('date_bae_Previsionnelle')->nullable();
+            $table->date('date_magasinage')->nullable();
+            $table->date('date_surestaries')->nullable();
+            $table->date('date_remise')->nullable(); // "Créé" to “Main levee”.
+            $table->date('date_taxation')->nullable(); // main levee to taxation
             $table->string('taxation_agent')->nullable(); // main levee to taxation
-            $table->string('date_execution')->nullable(); // taxation to planify
+            $table->date('date_execution')->nullable(); // taxation to planify
             $table->unsignedBigInteger('driver_id')->nullable(); // taxation to planify
             $table->unsignedBigInteger('vehicle_id')->nullable(); // taxation to planify
             $table->unsignedBigInteger('created_by');

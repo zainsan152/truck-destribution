@@ -17,4 +17,9 @@ class Vehicle extends Model
     {
         return $this->belongsToMany(Driver::class, 'mapping_driver_vehicle');
     }
+
+    public function arrivals()
+    {
+        $this->hasMany(Arrival::class);
+    }
 }

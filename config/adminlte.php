@@ -395,7 +395,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Previsionnel',
-                    'url'  => '/distributions',
+                    'url'  => '/arrivals',
                     'icon' => 'fas fa-minus',
                 ],
                 [
