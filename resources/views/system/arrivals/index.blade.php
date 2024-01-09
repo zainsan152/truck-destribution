@@ -30,7 +30,7 @@
         cursor: pointer;
     }
 
-    #distributionModal {
+    #arrivalFormModal {
         overflow-y: scroll;
     }
 
@@ -133,6 +133,7 @@
                 <div class="modal-body">
                     <form id="arrivalForm" action="#" method="POST">
                         @csrf
+                        <input type="hidden" id="arrival_id">
                         <div id="step1">
                             <div class="row">
                                 <div class="col-md-6">
@@ -350,6 +351,34 @@
                         Arrivage</i>
                     <a type="button" class="fas fa-edit btn btn-secondary" id="edit-arrival-btn"> Modifier
                         Arrivage</a>
+                    <a type="button" class="fas fa-file btn btn-secondary" id="bae-pret-btn"> BAE pret</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fade modal" id="baePretModal" style="display: none;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="#">
+                        @csrf
+                        <input type="hidden" id="bae_arrival_id">
+                        <div class="form-group">
+                            <label for="date_remise">Date remise</label>
+                            <input type="date" class="form-control" id="date_remise"
+                                   name="date_remise" placeholder="17/12/2022">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="fas fa-file btn btn-secondary" id="validerBae">Valider BAE</a>
                 </div>
             </div>
         </div>
@@ -408,8 +437,10 @@
                 }
             });
 
+            var action = '';
             // Open modal
             $('#arrivalFromBtn').click(function () {
+                action = 'store';
                 currentStep = 1; // Reset step to 1
                 showStep(currentStep);
                 $('#prevBtn').hide();
@@ -463,6 +494,7 @@
                 var formData = {
                     // Collect all necessary data
                     'arrival': {
+                        'arrival_id': $('#arrival_id').val(),
                         'client_id': $('#client_id').val(),
                         'arrival_type_id': $('#arrival_type_id').val(),
                         'dossier_tegic': $('#dossier_tegic').val(),
@@ -495,36 +527,56 @@
                 // AJAX call
                 $.ajax({
                     type: 'POST',
-                    url: '/store-arrivals', // URL to your route
+                    url: (action === 'store') ? '/store-arrivals' : '/update-arrivals', // URL to your route
                     data: formData,
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data);
                         Swal.fire(
                             false,
                             data.message,
                             'success'
                         );
                         $('#arrivalFormModal').modal('hide');
-                        var newRow = table.row.add([
-                            data.arrival.id,
-                            data.arrival.clients.name_client,
-                            data.arrival.arrival_types.type,
-                            data.arrival.dossier_tegic,
-                            data.arrival.dossier_client,
-                            data.arrival.shipping_compagnie,
-                            data.arrival.cities.city,
-                            data.arrival.eta,
-                            data.arrival.ata,
-                            data.arrival.lieu_de_chargement,
-                            data.arrival.lieu_de_dechargement,
-                            data.arrival.lieu_de_restitution,
-                            data.arrival.date_bae_Previsionnelle,
-                            data.arrival.date_magasinage,
-                            data.arrival.date_surestaries,
-                            '<i class="fas fa-info-circle show-arrival-details" data-arrival-id=' + data.arrival.id + '></i>'
-                        ]).draw().node();
-
+                        var arrivalId = $('#arrival_id').val();
+                        if (arrivalId) {
+                            var row = table.row(('#arrivalRow-' + arrivalId)).data([
+                                data.arrival.id,
+                                data.arrival.clients.name_client,
+                                data.arrival.arrival_types.type,
+                                data.arrival.dossier_tegic,
+                                data.arrival.dossier_client,
+                                data.arrival.shipping_compagnie,
+                                data.arrival.cities.city,
+                                data.arrival.eta,
+                                data.arrival.ata,
+                                data.arrival.lieu_de_chargement,
+                                data.arrival.lieu_de_dechargement,
+                                data.arrival.lieu_de_restitution,
+                                data.arrival.date_bae_Previsionnelle,
+                                data.arrival.date_magasinage,
+                                data.arrival.date_surestaries,
+                                '<i class="fas fa-info-circle show-arrival-details" data-arrival-id=' + data.arrival.id + '></i>'
+                            ]).draw();
+                        } else {
+                            var newRow = table.row.add([
+                                data.arrival.id,
+                                data.arrival.clients.name_client,
+                                data.arrival.arrival_types.type,
+                                data.arrival.dossier_tegic,
+                                data.arrival.dossier_client,
+                                data.arrival.shipping_compagnie,
+                                data.arrival.cities.city,
+                                data.arrival.eta,
+                                data.arrival.ata,
+                                data.arrival.lieu_de_chargement,
+                                data.arrival.lieu_de_dechargement,
+                                data.arrival.lieu_de_restitution,
+                                data.arrival.date_bae_Previsionnelle,
+                                data.arrival.date_magasinage,
+                                data.arrival.date_surestaries,
+                                '<i class="fas fa-info-circle show-arrival-details" data-arrival-id=' + data.arrival.id + '></i>'
+                            ]).draw().node();
+                        }
                         $(newRow).attr('id', 'arrivalRow-' + data.arrival.id);
                         $(newRow).find('td').css('text-align', 'center');
                     },
@@ -547,6 +599,9 @@
                         var modalTitle = $('#arrivalModal .modal-title');
                         modalTitle.text('Details arrivage ' + arrivalDetails.id);
 
+                        var modalBaeTitle = $('#baePretModal .modal-title');
+                        modalBaeTitle.text(arrivalDetails.id + ' Remise BAE');
+
                         // Create an HTML string for additional details
                         var additionalDetailsHtml = '<p name="client_id_ajax"><b>Client: </b>' + arrivalDetails.clients.name_client + '</p>';
                         additionalDetailsHtml += '<p name="id_type_ot_ajax"><b>Type: </b>' + arrivalDetails.arrival_types.type + '</p>';
@@ -555,18 +610,185 @@
                         additionalDetailsHtml += '<p name="shipping"><b>Shipping compagnie: </b>' + arrivalDetails.shipping_compagnie + '</p>';
                         additionalDetailsHtml += '<p name="pod"><b>POD: </b>' + arrivalDetails.cities.city + '</p>';
                         additionalDetailsHtml += '<hr>';
-                        // Add more details as needed
-// Populate the modal body with the table
+                        var arrivalLines = arrivalDetails.arrival_lines;
+
+                        var tableHtml = '' +
+                            '<table class="table table-bordered table-striped" id="lines-table">' +
+                            '<thead>' +
+                            '<tr>' +
+                            '<th>Numero</th>' +
+                            '<th>Nb de pieces</th>' +
+                            '<th>Poids</th>' +
+                            '<th>Volume</th>' +
+                            '</tr>' +
+                            '</thead>' +
+                            '<tbody>';
+                        $.each(arrivalLines, function (index, line) {
+                            tableHtml += '<tr id="lineRow-' + line.id + '">';
+                            tableHtml += '<td>' + line.numero + '</td>';
+                            tableHtml += '<td>' + line.nb_de_pieces + '</td>';
+                            tableHtml += '<td>' + line.poids + '</td>';
+                            tableHtml += '<td>' + line.volume + '</td>';
+                            tableHtml += '</tr>';
+                        });
+
+                        tableHtml += '</tbody></table>';
+
                         var modalBody = $('#arrivalModal .modal-body');
                         modalBody.empty(); // Clear previous content
                         modalBody.append(additionalDetailsHtml);
+                        modalBody.append(tableHtml);
                         $('#arrivalModal').modal('show');
+                        $('#delete-arrival-btn').attr('data-arrival-id', arrivalId);
+                        $('#edit-arrival-btn').attr('data-arrival-id', arrivalId);
+                        $('#bae-pret-btn').attr('data-arrival-id', arrivalId);
                     },
                     error: function (xhr, status, error) {
                         console.error('Ajax request error:', error);
                     }
                 });
             });
+
+            $(document).on('click', '#delete-arrival-btn', function () {
+                var arrivalId = $(this).data('arrival-id');
+
+                // Confirm the deletion with the user (optional)
+                // Send a DELETE request to delete the client
+                Swal.fire({
+                    title: 'Etes-vous sûr?',
+                    text: 'Voulez-vous supprimer cette distribution ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Oui',
+                    cancelButtonText: 'Non',
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '{{ route('arrival.delete') }}', // Use the correct route URL
+                            data: {id: arrivalId},
+                            success: function (data) {
+                                // Handle the success response here
+                                Swal.fire(
+                                    false,
+                                    data.message,
+                                    'success'
+                                );
+                                $('#arrivalModal').modal('hide');
+                                // Remove the row from table
+                                table.row('#arrivalRow-' + arrivalId).remove().draw();
+                            },
+                            error: function (xhr, status, error) {
+                                console.log(xhr.responseText);
+                                // Handle the error response here
+                            }
+                        });
+                    }
+                })
+            });
+
+            $(document).on('click', '#edit-arrival-btn', function () {
+                var arrivalId = $(this).data('arrival-id');
+                $('#arrivalModal').modal('hide');
+                $('#arrivalFormModal').modal('show');
+                $.ajax({
+                    type: 'GET',
+                    url: '/arrival-details/' + arrivalId,
+                    data: {id: arrivalId},
+                    success: function (data) {
+                        var arrival = data.arrival;
+                        var arrivalLines = data.arrival.arrival_lines;
+                        $('#client_id option[value="' + arrival.client_id + '"]').attr('selected', 'selected');
+                        $('#arrival_type_id option[value="' + arrival.arrival_type_id + '"]').attr('selected', 'selected');
+                        $('#city_id option[value="' + arrival.city_id + '"]').attr('selected', 'selected');
+                        $('#lieu_de_chargement option[value="' + arrival.lieu_de_chargement + '"]').attr('selected', 'selected');
+                        $('#lieu_de_dechargement option[value="' + arrival.lieu_de_dechargement + '"]').attr('selected', 'selected');
+                        $('#lieu_de_restitution option[value="' + arrival.lieu_de_restitution + '"]').attr('selected', 'selected');
+                        $('#dossier_tegic').val(arrival.dossier_tegic)
+                        $('#dossier_client').val(arrival.dossier_client)
+                        $('#shipping_compagnie').val(arrival.shipping_compagnie)
+                        $('#eta').val(arrival.eta)
+                        $('#ata').val(arrival.ata)
+                        $('#date_magasinage').val(arrival.date_magasinage)
+                        $('#date_bae_Previsionnelle').val(arrival.date_bae_Previsionnelle)
+                        $('#date_surestaries').val(arrival.date_surestaries)
+
+                        // Clear any existing rows
+                        $('.inputFormRow').not(':first').remove();
+
+                        // Iterate over each arrival line and create a row for it
+                        $.each(arrivalLines, function (index, line) {
+                            // Clone the first row to use as a template
+                            var newRow = $('.inputFormRow:first').clone();
+
+                            // Populate the newRow with data from arrival line
+                            $(newRow).find('.numero').val(line.numero);
+                            $(newRow).find('.arrival_line_type_id').val(line.arrival_line_type_id);
+                            $(newRow).find('.nb_de_pieces').val(line.nb_de_pieces);
+                            $(newRow).find('.poids').val(line.poids);
+                            $(newRow).find('.volume').val(line.volume);
+
+                            // Remove the id attributes to avoid duplicates
+                            $(newRow).find('input, select').removeAttr('id');
+
+                            // Add a minus button to remove the row
+                            var removeButton = $('<button>').addClass('btn btn-danger removeRow')
+                                .text('-')
+                                .click(function () {
+                                    $(this).closest('.inputFormRow').remove();
+                                });
+
+                            $(newRow).find('.col-md-12').append(removeButton);
+                            // Append the newRow to the form
+                            $(newRow).appendTo('#arrivalFormModal .modal-body #arrivalForm #step2');
+
+                            // If it's not the first item, show the remove button
+                            if (index !== 0) {
+                                $(newRow).find('.removeRow').show();
+                            }
+
+                            // Remove the first row if it's a placeholder or if you do not need it
+                            /*if (index !== 0) {
+                                $('.inputFormRow:first').remove();
+                            }*/
+                        });
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+
+            $(document).on('click', '#bae-pret-btn', function () {
+                var arrivalId = $(this).data('arrival-id');
+                $('#bae_arrival_id').val(arrivalId)
+                $('#baePretModal').modal('show');
+            });
+
+            $(document).on('click', '#validerBae', function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/valider-bae',
+                    data: {
+                        'arrival_id': $('#bae_arrival_id').val(),
+                        'date_remise': $('#date_remise').val()
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        Swal.fire(
+                            false,
+                            data.message,
+                            'success'
+                        );
+                        $('#arrivalModal').modal('hide');
+                        $('#baePretModal').modal('hide');
+                    },
+                    error: function (response) {
+                        console.log(response.error);
+                    }
+                });
+            })
         });
     </script>
 @endsection

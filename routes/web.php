@@ -71,6 +71,9 @@ Route::post('update-distribution-line', [\App\Http\Controllers\system\Distributi
 Route::get('arrivals', [\App\Http\Controllers\system\ArrivalController::class, 'index'])->name('arrivals');
 Route::post('import-arrivals', [\App\Http\Controllers\system\ArrivalController::class, 'import'])->name('arrivals.import');
 Route::post('store-arrivals', [\App\Http\Controllers\system\ArrivalController::class, 'store_arrival'])->name('arrivals.stores');
+Route::post('update-arrivals', [\App\Http\Controllers\system\ArrivalController::class, 'update_arrival'])->name('arrivals.update');
 Route::get('arrival-details/{arrival_id}', [\App\Http\Controllers\system\ArrivalController::class, 'details'])->name('arrivals.details');
+Route::delete('delete-arrival', [\App\Http\Controllers\system\ArrivalController::class, 'delete_arrival'])->name('arrival.delete');
+Route::post('valider-bae', [\App\Http\Controllers\system\ArrivalController::class, 'validerBae'])->name('validerBae');
 
 Auth::routes();
