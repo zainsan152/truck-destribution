@@ -9,6 +9,11 @@ class ArrivalLine extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    public function arrivals()
+    {
+        $this->belongsTo(Arrival::class);
+    }
+
     public function arrival_line_types()
     {
         $this->belongsTo(ArrivalLineType::class);
