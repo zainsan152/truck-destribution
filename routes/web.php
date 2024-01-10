@@ -79,4 +79,9 @@ Route::post('valider-bae', [\App\Http\Controllers\system\ArrivalController::clas
 Route::get('arrivals-levee', [\App\Http\Controllers\system\ArrivalController::class, 'main_levee'])->name('arrivals.main_levee');
 Route::post('valider-taxation', [\App\Http\Controllers\system\ArrivalController::class, 'validerTaxation'])->name('validerTaxation');
 
+Route::get('arrivals-taxation', [\App\Http\Controllers\system\ArrivalController::class, 'taxation'])->name('arrivals.taxation');
+Route::post('valider-ot', [\App\Http\Controllers\system\ArrivalController::class, 'validerOT'])->name('validerOT');
+
+Route::get('arrivals-ot', [\App\Http\Controllers\system\ArrivalController::class, 'ot'])->name('arrivals.ot');
+
 Auth::routes();

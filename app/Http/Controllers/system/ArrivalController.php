@@ -12,6 +12,7 @@ use App\Models\ArrivalType;
 use App\Models\City;
 use App\Models\Client;
 use App\Models\DeliveryPoint;
+use App\Models\Driver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -96,7 +97,7 @@ class ArrivalController extends Controller
 
     public function details($arrival_id)
     {
-        $arrival = Arrival::where('id', $arrival_id)->with('arrival_lines', 'clients', 'cities', 'arrival_types')->first();
+        $arrival = Arrival::where('id', $arrival_id)->with('arrival_lines', 'clients', 'cities', 'arrival_types', 'agents', 'drivers', 'vehicles')->first();
         return response()->json(['arrival' => $arrival]);
     }
 
@@ -120,7 +121,6 @@ class ArrivalController extends Controller
             $arrival->client_id = $arrivalData['client_id'];
             $arrival->arrival_type_id = $arrivalData['arrival_type_id'];
             $arrival->dossier_tegic = $arrivalData['dossier_tegic'];
-            $arrival->status = 'cree';
             $arrival->dossier_client = $arrivalData['dossier_client'];
             $arrival->shipping_compagnie = $arrivalData['shipping_compagnie'];
             $arrival->city_id = $arrivalData['city_id'];
@@ -132,7 +132,6 @@ class ArrivalController extends Controller
             $arrival->date_bae_Previsionnelle = $arrivalData['date_bae_Previsionnelle'];
             $arrival->date_magasinage = $arrivalData['date_magasinage'];
             $arrival->date_surestaries = $arrivalData['date_surestaries'];
-            $arrival->created_by = Auth::id();
             $arrival->save();
 
             // Store arrival lines
@@ -198,5 +197,51 @@ class ArrivalController extends Controller
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()]);
         }
+    }
+
+    public function taxation()
+    {
+        $arrivals = Arrival::with('clients', 'arrival_types', 'cities', 'agents')->where('status', 'taxation')->get();
+        $arrivalTypes = ArrivalType::all();
+        $clients = Client::all();
+        $cities = City::all();
+        $lineTypes = ArrivalLineType::all();
+        $deliveryPoints = DeliveryPoint::all();
+        $drivers = Driver::all();
+        return view('system.arrivals.taxation', get_defined_vars());
+    }
+
+    public function validerOT(Request $request)
+    {
+        try {
+            $vehicle = DB::table('mapping_driver_vehicle')->where('id_driver', $request->driver_id)->first();
+            if (!$vehicle){
+                return response()->json(['message' => 'Vehicle not assigned to this driver', 'status' => 404]);
+            }
+            DB::beginTransaction();
+            $arrival = Arrival::findOrFail($request->arrival_id);
+            $arrival->date_execution = $request->date_execution;
+            $arrival->driver_id = $request->driver_id;
+            $arrival->vehicle_id = $vehicle->id_vehicle;
+            $arrival->status = 'planifie';
+            $arrival->save();
+            DB::commit();
+            return response()->json(['message' => 'Voter OT est taxe avec succes']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function ot()
+    {
+        $arrivals = Arrival::with('clients', 'arrival_types', 'cities', 'agents', 'drivers', 'vehicles')->where('status', 'planifie')->get();
+        $arrivalTypes = ArrivalType::all();
+        $clients = Client::all();
+        $cities = City::all();
+        $lineTypes = ArrivalLineType::all();
+        $deliveryPoints = DeliveryPoint::all();
+        $drivers = Driver::all();
+        return view('system.arrivals.ot', get_defined_vars());
     }
 }

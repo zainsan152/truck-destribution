@@ -405,12 +405,12 @@ return [
                 ],
                 [
                     'text' => 'Taxation',
-                    'url'  => '/distributions',
+                    'url'  => '/arrivals-taxation',
                     'icon' => 'fas fa-minus',
                 ],
                 [
                     'text' => 'OT',
-                    'url'  => '/distributions',
+                    'url'  => '/arrivals-ot',
                     'icon' => 'fas fa-minus',
                 ],
                 [
