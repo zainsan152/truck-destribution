@@ -36,4 +36,8 @@ class Arrival extends Model
     {
         return $this->belongsTo(Vehicle::class);
     }
+    public function agents()
+    {
+        return $this->belongsTo(Agent::class, 'taxation_agent');
+    }
 }

@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([UsersTableSeeder::class, CitySeeder::class, TruckCategorySeeder::class, ClientSeeder::class, DistributionTypeSeeder::class, VehicleSeeder::class, DriverSeeder::class, ArrivalType::class, ArrivalLineType::class, DeliveryPointSeeder::class]);
+        $this->call([UsersTableSeeder::class, CitySeeder::class, TruckCategorySeeder::class, ClientSeeder::class, DistributionTypeSeeder::class, VehicleSeeder::class, DriverSeeder::class, ArrivalType::class, ArrivalLineType::class, DeliveryPointSeeder::class, AgentSeeder::class]);
 //         \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

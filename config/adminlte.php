@@ -400,7 +400,7 @@ return [
                 ],
                 [
                     'text' => 'Main levee',
-                    'url'  => '/distributions',
+                    'url'  => '/arrivals-levee',
                     'icon' => 'fas fa-minus',
                 ],
                 [

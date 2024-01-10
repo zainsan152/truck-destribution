@@ -4,6 +4,7 @@ namespace App\Http\Controllers\system;
 
 use App\Http\Controllers\Controller;
 use App\Imports\ArrivalImport;
+use App\Models\Agent;
 use App\Models\Arrival;
 use App\Models\ArrivalLine;
 use App\Models\ArrivalLineType;
@@ -25,7 +26,7 @@ class ArrivalController extends Controller
 
     public function index()
     {
-        $arrivals = Arrival::with('clients', 'arrival_types', 'cities')->get();
+        $arrivals = Arrival::with('clients', 'arrival_types', 'cities')->where('status', 'cree')->get();
         $arrivalTypes = ArrivalType::all();
         $clients = Client::all();
         $cities = City::all();
@@ -164,6 +165,35 @@ class ArrivalController extends Controller
             $arrival->save();
             DB::commit();
             return response()->json(['message' => 'Voter BAE est remis avec succes']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function main_levee()
+    {
+        $arrivals = Arrival::with('clients', 'arrival_types', 'cities', 'agents')->where('status', 'main_levee')->get();
+        $arrivalTypes = ArrivalType::all();
+        $clients = Client::all();
+        $cities = City::all();
+        $lineTypes = ArrivalLineType::all();
+        $deliveryPoints = DeliveryPoint::all();
+        $agents = Agent::where('type', 'tax')->get();
+        return view('system.arrivals.main_levee', get_defined_vars());
+    }
+
+    public function validerTaxation(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $arrival = Arrival::findOrFail($request->arrival_id);
+            $arrival->date_taxation = $request->date_taxation;
+            $arrival->taxation_agent = $request->taxation_agent;
+            $arrival->status = 'taxation';
+            $arrival->save();
+            DB::commit();
+            return response()->json(['message' => 'Voter BAE est taxe avec succes']);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()]);

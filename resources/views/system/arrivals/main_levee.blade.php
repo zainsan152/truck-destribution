@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'Arrivals-Cree')
+@section('title', 'Arrivals-Main Levee')
 @section('plugins.Datatables', true)
 @section('plugins.Sweetalert2', true)
 @section('plugins.Toasts', true)
@@ -41,33 +41,8 @@
         <div class="row pt-3">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Ajouter les distributions</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="col-md-6">
-                            <form action="{{ route('arrivals.import') }}" method="POST"
-                                  enctype="multipart/form-data" class="form-inline">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="file">Ajouter un fichier</label>
-                                    <input type="file" name="file" id="file" class="form-control-file">
-                                </div>
-                                <button type="submit" class="btn btn-primary mt-3"
-                                        id="fileBtn">Importer arrivage
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row pt-3">
-            <div class="col-md-12">
-                <div class="card">
                     <div class="card-header" style="display: flex; align-items: center;">
                         <h3 class="card-title">Liste des Arrivages previsionnels</h3>
-                        <button class="btn btn-primary" id="arrivalFromBtn">Ajouter un arrivage</button>
                     </div>
                     <div class="card-body">
                         <table id="arrivals-table" class="table table-bordered table-striped">
@@ -88,6 +63,7 @@
                                 <th>Date BAE Prévisionnelle</th>
                                 <th>Date magasinage</th>
                                 <th>Date Surestaries</th>
+                                <th>Date Remise</th>
                                 <th>Details</th>
                             </tr>
                             </thead>
@@ -110,6 +86,7 @@
                                     <td>{{$arrival->date_bae_Previsionnelle}}</td>
                                     <td>{{$arrival->date_magasinage}}</td>
                                     <td>{{$arrival->date_surestaries}}</td>
+                                    <td>{{$arrival->date_remise}}</td>
                                     <td><i class="fas fa-info-circle show-arrival-details"
                                            data-arrival-id="{{$arrival->id}}"></i></td>
                                 </tr>
@@ -351,13 +328,13 @@
                         Arrivage</i>
                     <a type="button" class="fas fa-edit btn btn-secondary" id="edit-arrival-btn"> Modifier
                         Arrivage</a>
-                    <a type="button" class="fas fa-file btn btn-secondary" id="bae-pret-btn"> BAE pret</a>
+                    <a type="button" class="fas fa-file btn btn-secondary" id="taxation-btn">Taxation</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="fade modal" id="baePretModal" style="display: none;">
+    <div class="fade modal" id="taxationModal" style="display: none;">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
@@ -369,16 +346,28 @@
                 <div class="modal-body">
                     <form action="#">
                         @csrf
-                        <input type="hidden" id="bae_arrival_id">
+                        <input type="hidden" id="taxation_arrival_id">
                         <div class="form-group">
-                            <label for="date_remise">Date remise</label>
-                            <input type="date" class="form-control" id="date_remise"
-                                   name="date_remise" placeholder="17/12/2022">
+                            <label for="date_remise">Date de taxation</label>
+                            <input type="date" class="form-control" id="date_taxation"
+                                   name="date_taxation" placeholder="17/12/2022">
+                        </div>
+                        <div class="form-group">
+                            <label for="taxation_agent">AgentDe taxation</label>
+                            <select name="taxation_agent" id="taxation_agent"
+                                    class="form-control taxation_agent">
+                                <option value="">Sélectionner une valeur</option>
+                                @foreach($agents as $agent)
+                                    <option value="{{$agent->id}}">
+                                        {{$agent->name}}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <a type="button" class="fas fa-file btn btn-secondary" id="validerBae">Valider BAE</a>
+                    <a type="button" class="fas fa-file btn btn-secondary" id="validerTaxation">Valider Taxation</a>
                 </div>
             </div>
         </div>
@@ -435,18 +424,6 @@
                     $('#submitBtn').show();
                     // $('#arrivalModalLabel').text(`Multi-Step Form - Step ${step}`);
                 }
-            });
-
-            var action = '';
-            // Open modal
-            $('#arrivalFromBtn').click(function () {
-                action = 'store';
-                currentStep = 1; // Reset step to 1
-                showStep(currentStep);
-                $('#prevBtn').hide();
-                $('#nextBtn').show();
-                $('#submitBtn').hide();
-                $('#arrivalFormModal').modal('show');
             });
 
             // Function to update the visibility of minus buttons
@@ -527,7 +504,7 @@
                 // AJAX call
                 $.ajax({
                     type: 'POST',
-                    url: (action === 'store') ? '/store-arrivals' : '/update-arrivals', // URL to your route
+                    url: '/update-arrivals', // URL to your route
                     data: formData,
                     dataType: 'json',
                     success: function (data) {
@@ -557,28 +534,7 @@
                                 data.arrival.date_surestaries,
                                 '<i class="fas fa-info-circle show-arrival-details" data-arrival-id=' + data.arrival.id + '></i>'
                             ]).draw();
-                        } else {
-                            var newRow = table.row.add([
-                                data.arrival.id,
-                                data.arrival.clients.name_client,
-                                data.arrival.arrival_types.type,
-                                data.arrival.dossier_tegic,
-                                data.arrival.dossier_client,
-                                data.arrival.shipping_compagnie,
-                                data.arrival.cities.city,
-                                data.arrival.eta,
-                                data.arrival.ata,
-                                data.arrival.lieu_de_chargement,
-                                data.arrival.lieu_de_dechargement,
-                                data.arrival.lieu_de_restitution,
-                                data.arrival.date_bae_Previsionnelle,
-                                data.arrival.date_magasinage,
-                                data.arrival.date_surestaries,
-                                '<i class="fas fa-info-circle show-arrival-details" data-arrival-id=' + data.arrival.id + '></i>'
-                            ]).draw().node();
                         }
-                        $(newRow).attr('id', 'arrivalRow-' + data.arrival.id);
-                        $(newRow).find('td').css('text-align', 'center');
                     },
                     error: function (response) {
                         console.log(response.error);
@@ -599,7 +555,7 @@
                         var modalTitle = $('#arrivalModal .modal-title');
                         modalTitle.text('Details arrivage ' + arrivalDetails.id);
 
-                        var modalBaeTitle = $('#baePretModal .modal-title');
+                        var modalBaeTitle = $('#taxationModal .modal-title');
                         modalBaeTitle.text(arrivalDetails.dossier_tegic + ' ' + arrivalDetails.dossier_client + ' Remise BAE');
 
                         // Create an HTML string for additional details
@@ -641,7 +597,7 @@
                         $('#arrivalModal').modal('show');
                         $('#delete-arrival-btn').attr('data-arrival-id', arrivalId);
                         $('#edit-arrival-btn').attr('data-arrival-id', arrivalId);
-                        $('#bae-pret-btn').attr('data-arrival-id', arrivalId);
+                        $('#taxation-btn').attr('data-arrival-id', arrivalId);
                     },
                     error: function (xhr, status, error) {
                         console.error('Ajax request error:', error);
@@ -760,19 +716,20 @@
                 });
             });
 
-            $(document).on('click', '#bae-pret-btn', function () {
+            $(document).on('click', '#taxation-btn', function () {
                 var arrivalId = $(this).data('arrival-id');
-                $('#bae_arrival_id').val(arrivalId)
-                $('#baePretModal').modal('show');
+                $('#taxation_arrival_id').val(arrivalId)
+                $('#taxationModal').modal('show');
             });
 
-            $(document).on('click', '#validerBae', function () {
+            $(document).on('click', '#validerTaxation', function () {
                 $.ajax({
                     type: 'POST',
-                    url: '/valider-bae',
+                    url: '/valider-taxation',
                     data: {
-                        'arrival_id': $('#bae_arrival_id').val(),
-                        'date_remise': $('#date_remise').val()
+                        'arrival_id': $('#taxation_arrival_id').val(),
+                        'date_taxation': $('#date_taxation').val(),
+                        'taxation_agent': $('#taxation_agent').val()
                     },
                     dataType: 'json',
                     success: function (data) {
@@ -782,7 +739,7 @@
                             'success'
                         );
                         $('#arrivalModal').modal('hide');
-                        $('#baePretModal').modal('hide');
+                        $('#taxationModal').modal('hide');
                     },
                     error: function (response) {
                         console.log(response.error);

@@ -76,4 +76,7 @@ Route::get('arrival-details/{arrival_id}', [\App\Http\Controllers\system\Arrival
 Route::delete('delete-arrival', [\App\Http\Controllers\system\ArrivalController::class, 'delete_arrival'])->name('arrival.delete');
 Route::post('valider-bae', [\App\Http\Controllers\system\ArrivalController::class, 'validerBae'])->name('validerBae');
 
+Route::get('arrivals-levee', [\App\Http\Controllers\system\ArrivalController::class, 'main_levee'])->name('arrivals.main_levee');
+Route::post('valider-taxation', [\App\Http\Controllers\system\ArrivalController::class, 'validerTaxation'])->name('validerTaxation');
+
 Auth::routes();
