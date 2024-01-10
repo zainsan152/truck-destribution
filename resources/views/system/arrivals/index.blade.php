@@ -783,6 +783,7 @@
                         );
                         $('#arrivalModal').modal('hide');
                         $('#baePretModal').modal('hide');
+                        table.row(('#arrivalRow-' + $('#bae_arrival_id').val())).remove().draw();
                     },
                     error: function (response) {
                         console.log(response.error);

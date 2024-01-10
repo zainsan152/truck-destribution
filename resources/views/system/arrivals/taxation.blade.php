@@ -751,8 +751,8 @@
                             );
                             $('#arrivalModal').modal('hide');
                             $('#otModal').modal('hide');
+                            table.row(('#arrivalRow-' + $('#ot_arrival_id').val())).remove().draw();
                         }
-
                     },
                     error: function (response) {
                         console.log(response.error);

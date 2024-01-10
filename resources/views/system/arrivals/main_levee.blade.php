@@ -740,6 +740,7 @@
                         );
                         $('#arrivalModal').modal('hide');
                         $('#taxationModal').modal('hide');
+                        table.row(('#arrivalRow-' + $('#taxation_arrival_id').val())).remove().draw();
                     },
                     error: function (response) {
                         console.log(response.error);
