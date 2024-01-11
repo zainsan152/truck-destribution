@@ -37,8 +37,8 @@ class ArrivalImport implements ToCollection
             foreach ($collections->toArray() as $index => $collection) {
 //                dd($collection);
                 $client = Client::where('name_client', $collection['Client'])->first();
-                $type = ArrivalType::where('type', $collection['Arrival Type'])->first();
-                $lineType = ArrivalLineType::where('type', $collection['Line Type'])->first();
+                $type = ArrivalType::where('type', $collection['Type'])->first();
+                $lineType = ArrivalLineType::where('type', $collection['packaging type'])->first();
                 $city = City::where('city', $collection['POD'])->first();
                 $eta = convertExcelDateToTimestamp($collection['ETA']);
                 $ata = convertExcelDateToTimestamp($collection['ATA']);
