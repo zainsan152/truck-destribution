@@ -67,7 +67,7 @@
                 <div class="card">
                     <div class="card-header" style="display: flex; align-items: center;">
                         <h3 class="card-title">Liste des Arrivages previsionnels</h3>
-                        <button class="btn btn-primary" id="arrivalFromBtn">Ajouter un arrivage</button>
+                        <button class="btn btn-primary" id="arrivalFromBtn" style="margin-left: auto;">Ajouter un arrivage</button>
                     </div>
                     <div class="card-body">
                         <table id="arrivals-table" class="table table-bordered table-striped">

@@ -349,6 +349,13 @@
                         additionalDetailsHtml += '<p name="doss_client"><b>Dossier client: </b>' + arrivalDetails.dossier_client + '</p>';
                         additionalDetailsHtml += '<p name="shipping"><b>Shipping compagnie: </b>' + arrivalDetails.shipping_compagnie + '</p>';
                         additionalDetailsHtml += '<p name="pod"><b>POD: </b>' + arrivalDetails.cities.city + '</p>';
+                        additionalDetailsHtml += '<p name="date_bae"><b>Date Bae: </b>' + arrivalDetails.date_remise + '</p>';
+                        additionalDetailsHtml += '<p name="status"><b>Status: </b>' + arrivalDetails.status.replace('_', ' '); + '</p>';
+                        additionalDetailsHtml += '<p name="date_taxation"><b>Date Taxation: </b>' + arrivalDetails.date_taxation + '</p>';
+                        additionalDetailsHtml += '<p name="agent"><b>Tax agent: </b>' + arrivalDetails.agents.name + '</p>';
+                        additionalDetailsHtml += '<p name="date_execution"><b>Date d execution: </b>' + arrivalDetails.date_execution + '</p>';
+                        if(arrivalDetails.drivers)
+                            additionalDetailsHtml += '<p name="chauffer"><b>Chauffeur: </b>' + arrivalDetails.drivers.firstname + " " + arrivalDetails.drivers.lastname +'</p>';
                         additionalDetailsHtml += '<hr>';
                         var arrivalLines = arrivalDetails.arrival_lines;
 

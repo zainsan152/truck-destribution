@@ -61,7 +61,7 @@
                 </a>
             </div>
             <div class="col-md-4 mb-4">
-                <a href="#">
+                <a href="{{route('arrivals')}}">
                     <div class="card h-100">
                         <div class="card-body text-center d-flex flex-column justify-content-center">
                             <i class="far fa-calendar-alt fa-3x mb-3"></i>

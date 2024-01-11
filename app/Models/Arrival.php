@@ -30,7 +30,7 @@ class Arrival extends Model
     }
     public function drivers()
     {
-        return $this->belongsTo(Driver::class);
+        return $this->belongsTo(Driver::class, 'driver_id');
     }
     public function vehicles()
     {
