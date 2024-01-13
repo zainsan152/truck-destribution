@@ -4,11 +4,11 @@
 @section('plugins.Sweetalert2', true)
 @section('plugins.Toasts', true)
 <style>
-    .distribution-row td {
+    .arrival-row td {
         text-align: center;
     }
 
-    .show-distribution-details {
+    .show-arrival-details {
         cursor: pointer;
     }
 
@@ -119,8 +119,8 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="client">Client</label>
-                                        <select name="client_id" id="client_id" class="form-control">
+                                        <label for="client">Client*</label>
+                                        <select name="client_id" id="client_id" class="form-control" required>
                                             <option value="">Sélectionner une valeur</option>
                                             @foreach($clients as $client)
                                                 <option value="{{$client->id_client}}">
@@ -132,8 +132,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="type">Type</label>
-                                        <select name="arrival_type_id" id="arrival_type_id" class="form-control">
+                                        <label for="type">Type*</label>
+                                        <select name="arrival_type_id" id="arrival_type_id" class="form-control"
+                                                required>
                                             <option value="">Sélectionner une valeur</option>
                                             @foreach($arrivalTypes as $arrivalType)
                                                 <option value="{{$arrivalType->id}}">
@@ -145,8 +146,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="dossier_tegic">Dossier Tegic</label>
-                                        <input type="text" class="form-control" id="dossier_tegic" name="dossier_tegic">
+                                        <label for="dossier_tegic">Dossier Tegic*</label>
+                                        <input type="text" class="form-control" id="dossier_tegic" name="dossier_tegic"
+                                               required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -158,15 +160,15 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="shipping_compagnie">Shipping Compagnie</label>
+                                        <label for="shipping_compagnie">Shipping Compagnie*</label>
                                         <input type="text" class="form-control" id="shipping_compagnie"
-                                               name="shipping_compagnie">
+                                               name="shipping_compagnie" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="city_id">POD</label>
-                                        <select name="city_id" id="city_id" class="form-control">
+                                        <label for="city_id">POD*</label>
+                                        <select name="city_id" id="city_id" class="form-control" required>
                                             <option value="">Sélectionner une valeur</option>
                                             @foreach($cities as $city)
                                                 <option value="{{$city->id_city}}">
@@ -178,9 +180,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="eta">ETA</label>
+                                        <label for="eta">ETA*</label>
                                         <input type="date" class="form-control" id="eta" name="eta"
-                                               placeholder="17/12/2022">
+                                               placeholder="17/12/2022" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -192,9 +194,10 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="lieu_de_chargement">Lieu de chargement
+                                        <label for="lieu_de_chargement">Lieu de chargement*
                                         </label>
-                                        <select name="lieu_de_chargement" id="lieu_de_chargement" class="form-control">
+                                        <select name="lieu_de_chargement" id="lieu_de_chargement" class="form-control"
+                                                required>
                                             <option value="">Sélectionner une valeur</option>
                                             @foreach($deliveryPoints as $points)
                                                 <option value="{{$points->name_delivery}}">
@@ -206,10 +209,10 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="lieu_de_dechargement">Lieu de déchargement
+                                        <label for="lieu_de_dechargement">Lieu de déchargement*
                                         </label>
                                         <select name="lieu_de_dechargement" id="lieu_de_dechargement"
-                                                class="form-control">
+                                                class="form-control" required>
                                             <option value="">Sélectionner une valeur</option>
                                             @foreach($deliveryPoints as $points)
                                                 <option value="{{$points->name_delivery}}">
@@ -221,9 +224,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="lieu_de_restitution">Lieu de Restitution</label>
+                                        <label for="lieu_de_restitution">Lieu de Restitution*</label>
                                         <select name="lieu_de_restitution" id="lieu_de_restitution"
-                                                class="form-control">
+                                                class="form-control" required>
                                             <option value="">Sélectionner une valeur</option>
                                             @foreach($deliveryPoints as $points)
                                                 <option value="{{$points->name_delivery}}">
@@ -261,15 +264,16 @@
                             <div class="row inputFormRow">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="numero">Numéro</label>
-                                        <input type="text" class="form-control numero" id="numero" name="numero[]">
+                                        <label for="numero">Numéro*</label>
+                                        <input type="text" class="form-control numero" id="numero" name="numero[]"
+                                               required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="arrival_line_type_id">Type</label>
+                                        <label for="arrival_line_type_id">Type*</label>
                                         <select name="arrival_line_type_id[]" id="arrival_line_type_id"
-                                                class="form-control arrival_line_type_id">
+                                                class="form-control arrival_line_type_id" required>
                                             <option value="">Sélectionner une valeur</option>
                                             @foreach($lineTypes as $lineType)
                                                 <option value="{{$lineType->id}}">
@@ -281,9 +285,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="nb_de_pieces">Nb de pièces</label>
+                                        <label for="nb_de_pieces">Nb de pièces*</label>
                                         <input type="text" class="form-control nb_de_pieces" id="nb_de_pieces"
-                                               name="nb_de_pieces[]">
+                                               name="nb_de_pieces[]" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -512,12 +516,21 @@
                     data: formData,
                     dataType: 'json',
                     success: function (data) {
-                        Swal.fire(
-                            false,
-                            data.message,
-                            'success'
-                        );
-                        $('#arrivalFormModal').modal('hide');
+                        if (data.status === 422) {
+                            Swal.fire(
+                                false,
+                                'Please fill the required fields',
+                                'warning'
+                            );
+                            return;
+                        } else {
+                            Swal.fire(
+                                false,
+                                data.message,
+                                'success'
+                            );
+                            $('#arrivalFormModal').modal('hide');
+                        }
                         var arrivalId = $('#arrival_id').val();
                         if (arrivalId) {
                             var row = table.row(('#arrivalRow-' + arrivalId)).data([
@@ -536,6 +549,9 @@
                                 data.arrival.date_bae_Previsionnelle,
                                 data.arrival.date_magasinage,
                                 data.arrival.date_surestaries,
+                                data.arrival.date_remise,
+                                data.arrival.agents.name,
+                                data.arrival.date_taxation,
                                 '<i class="fas fa-info-circle show-arrival-details" data-arrival-id=' + data.arrival.id + '></i>'
                             ]).draw();
                         }
@@ -620,7 +636,7 @@
                 // Send a DELETE request to delete the client
                 Swal.fire({
                     title: 'Etes-vous sûr?',
-                    text: 'Voulez-vous supprimer cette distribution ?',
+                    text: 'Voulez-vous supprimer cette arrivage ?',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Oui',
@@ -653,6 +669,7 @@
 
             $(document).on('click', '#edit-arrival-btn', function () {
                 var arrivalId = $(this).data('arrival-id');
+                $('#arrival_id').val(arrivalId);
                 $('#arrivalModal').modal('hide');
                 $('#arrivalFormModal').modal('show');
                 $.ajax({

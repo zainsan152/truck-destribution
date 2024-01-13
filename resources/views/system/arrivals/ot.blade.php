@@ -4,11 +4,11 @@
 @section('plugins.Sweetalert2', true)
 @section('plugins.Toasts', true)
 <style>
-    .distribution-row td {
+    .arrival-row td {
         text-align: center;
     }
 
-    .show-distribution-details {
+    .show-arrival-details {
         cursor: pointer;
     }
 
@@ -292,12 +292,21 @@
                     data: formData,
                     dataType: 'json',
                     success: function (data) {
-                        Swal.fire(
-                            false,
-                            data.message,
-                            'success'
-                        );
-                        $('#arrivalFormModal').modal('hide');
+                        if (data.status === 422) {
+                            Swal.fire(
+                                false,
+                                'Please fill the required fields',
+                                'warning'
+                            );
+                            return;
+                        } else {
+                            Swal.fire(
+                                false,
+                                data.message,
+                                'success'
+                            );
+                            $('#arrivalFormModal').modal('hide');
+                        }
                         var arrivalId = $('#arrival_id').val();
                         if (arrivalId) {
                             var row = table.row(('#arrivalRow-' + arrivalId)).data([
@@ -403,7 +412,7 @@
                 // Send a DELETE request to delete the client
                 Swal.fire({
                     title: 'Etes-vous sûr?',
-                    text: 'Voulez-vous supprimer cette distribution ?',
+                    text: 'Voulez-vous supprimer cette arrivage ?',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Oui',
@@ -436,6 +445,7 @@
 
             $(document).on('click', '#edit-arrival-btn', function () {
                 var arrivalId = $(this).data('arrival-id');
+                $('#arrival_id').val(arrivalId);
                 $('#arrivalModal').modal('hide');
                 $('#arrivalFormModal').modal('show');
                 $.ajax({

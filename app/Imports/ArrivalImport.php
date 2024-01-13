@@ -35,7 +35,6 @@ class ArrivalImport implements ToCollection
                 return $headers->combine($row);
             });
             foreach ($collections->toArray() as $index => $collection) {
-//                dd($collection);
                 $client = Client::where('name_client', $collection['Client'])->first();
                 $type = ArrivalType::where('type', $collection['Type'])->first();
                 $lineType = ArrivalLineType::where('type', $collection['packaging type'])->first();
@@ -46,39 +45,43 @@ class ArrivalImport implements ToCollection
                 $date_maga = convertExcelDateToTimestamp($collection['Date magasinage']);
                 $date_sur = convertExcelDateToTimestamp($collection['Date Surestaries']);
 
-                if ($collection['ID']) {
-                    $arrival = Arrival::create([
-                        'client_id' => $client->id_client,
-                        'arrival_type_id' => $type->id,
-                        'status' => 'cree',
-                        'dossier_tegic' => $collection['Dossier Tegic'],
-                        'dossier_client' => $collection['Dossier Client'],
-                        'shipping_compagnie' => $collection['Shipping Compagnie'],
-                        'city_id' => $city->id_city,
-                        'eta' => $eta,
-                        'ata' => $ata,
-                        'lieu_de_chargement' => $collection['Lieu de chargement'],
-                        'lieu_de_dechargement' => $collection['Lieu de déchargement'],
-                        'lieu_de_restitution' => $collection['Lieu de Restitution'],
-                        'date_bae_Previsionnelle' => $date_bae,
-                        'date_magasinage' => $date_maga,
-                        'date_surestaries' => $date_sur,
-                        'created_by' => Auth::id(),
-//                    'modifiedby' => Auth::id(),
-                    ]);
+                $existingArrival = Arrival::where('client_id', $client->id_client)->where('dossier_client', $collection['Dossier Client'])->first(); //check for avoiding duplicate entries
 
-                    $arrival_line = ArrivalLine::create([
-                        'arrival_id' => $arrival->id,
-                        'numero' => $collection['Numéro'],
-                        'arrival_line_type_id' => $lineType->id,
-                        'nb_de_pieces' => $collection['Nb de pièces'],
-                        'poids' => $collection['Poids'],
-                        'volume' => $collection['Volume'],
-                    ]);
+                if ($collection['ID']) {
+                    if (!$existingArrival) {
+                        $arrival = Arrival::create([
+                            'client_id' => $client->id_client,
+                            'arrival_type_id' => $type->id,
+                            'status' => 'cree',
+                            'dossier_tegic' => $collection['Dossier Tegic'],
+                            'dossier_client' => $collection['Dossier Client'],
+                            'shipping_compagnie' => $collection['Shipping Compagnie'],
+                            'city_id' => $city->id_city,
+                            'eta' => $eta,
+                            'ata' => $ata,
+                            'lieu_de_chargement' => $collection['Lieu de chargement'],
+                            'lieu_de_dechargement' => $collection['Lieu de déchargement'],
+                            'lieu_de_restitution' => $collection['Lieu de Restitution'],
+                            'date_bae_Previsionnelle' => $date_bae,
+                            'date_magasinage' => $date_maga,
+                            'date_surestaries' => $date_sur,
+                            'created_by' => Auth::id(),
+//                    'modifiedby' => Auth::id(),
+                        ]);
+
+                        $arrival_line = ArrivalLine::create([
+                            'arrival_id' => $arrival->id,
+                            'numero' => $collection['Numéro'],
+                            'arrival_line_type_id' => $lineType->id,
+                            'nb_de_pieces' => $collection['Nb de pièces'],
+                            'poids' => $collection['Poids'],
+                            'volume' => $collection['Volume'],
+                        ]);
+
+                    }
                 }
             }
             DB::commit();
-
         } catch (\Exception $exception) {
             DB::rollback();
             throw $exception;

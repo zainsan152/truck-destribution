@@ -16,6 +16,7 @@ use App\Models\Driver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ArrivalController extends Controller
@@ -54,6 +55,25 @@ class ArrivalController extends Controller
     public function store_arrival(Request $request)
     {
         try {
+            $rules = [
+                'arrival.client_id' => 'required',
+                'arrival.arrival_type_id' => 'required',
+                'arrival.dossier_tegic' => 'required',
+                'arrival.shipping_compagnie' => 'required',
+                'arrival.city_id' => 'required',
+                'arrival.eta' => 'required',
+                'arrival.lieu_de_chargement' => 'required',
+                'arrival.lieu_de_dechargement' => 'required',
+                'arrival.lieu_de_restitution' => 'required',
+                'arrival_lines.*.numero' => 'required',
+                'arrival_lines.*.arrival_line_type_id' => 'required',
+                'arrival_lines.*.nb_de_pieces' => 'required',
+            ];
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors() ,'status' => 422]);
+            }
             DB::beginTransaction();
             $arrivalData = $request->arrival;
             $arrival = new Arrival();
@@ -114,6 +134,26 @@ class ArrivalController extends Controller
     public function update_arrival(Request $request)
     {
         try {
+            $rules = [
+                'arrival.arrival_id' => 'required',
+                'arrival.client_id' => 'required',
+                'arrival.arrival_type_id' => 'required',
+                'arrival.dossier_tegic' => 'required',
+                'arrival.shipping_compagnie' => 'required',
+                'arrival.city_id' => 'required',
+                'arrival.eta' => 'required',
+                'arrival.lieu_de_chargement' => 'required',
+                'arrival.lieu_de_dechargement' => 'required',
+                'arrival.lieu_de_restitution' => 'required',
+                'arrival_lines.*.numero' => 'required',
+                'arrival_lines.*.arrival_line_type_id' => 'required',
+                'arrival_lines.*.nb_de_pieces' => 'required',
+            ];
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors() ,'status' => 422]);
+            }
             DB::beginTransaction();
             $arrivalData = $request->arrival;
             $arrival = Arrival::find($arrivalData['arrival_id']);
