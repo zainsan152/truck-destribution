@@ -323,10 +323,9 @@
                                         <input type="text" class="form-control volume" id="volume" name="volume[]">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-12">
-                                <button id="addRow" type="button" class="btn btn-info addRow">+</button>
-                                <button type="button" class="btn btn-danger removeRow" style="display: none;">-</button>
+                                <div class="col-md-12">
+                                    <button id="addRow" class="btn btn-info addRow" type="button">+</button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -455,34 +454,35 @@
                 $('#arrivalFormModal').modal('show');
             });
 
-            // Function to update the visibility of minus buttons
-            function updateMinusButtons() {
-                if ($('.inputFormRow').length === 1) {
-                    $('.removeRow').hide();
-                } else {
-                    $('.removeRow').show();
-                }
+            // Function to update buttons visibility
+            function updateButtons() {
+                $('#step2 .inputFormRow').each(function(index) {
+                    $(this).find('.minusBtn').remove(); // Remove existing minus button
+                    if (index > 0) { // Add minus button for all but the first row
+                        $(this).append('<div class="col-md-12"><button type="button" class="btn btn-danger minusBtn">-</button></div>');
+                    }
+                });
             }
 
-            // Initially call the update function
-            updateMinusButtons();
+            // Event handler for adding a new row
+            $(document).on('click', '#addRow', function() {
+                var newRow = $('#step2 .inputFormRow:first').clone(true); // Clone the first row
+                newRow.find('input').val(''); // Clear the input fields in the cloned row
+                newRow.find('select').prop('selectedIndex', 0); // Reset select to its first option
+                newRow.find('.col-md-12').remove();
+                newRow.insertAfter($('#step2 .inputFormRow:last')); // Insert the new row at the end
 
-            // Add row
-            $(".addRow").click(function () {
-                var newRow = $('.inputFormRow:first').clone();
-                newRow.find('input').val(''); // Clear the values in the inputs
-                if (!newRow.find('.removeRow').length) {
-                    newRow.append('<div class="col-md-12"><button type="button" class="btn btn-danger removeRow">-</button></div>');
-                }
-                $('.inputFormRow:last').after(newRow);
-                updateMinusButtons();
+                updateButtons(); // Update buttons visibility
             });
 
-            // Remove row
-            $(document).on('click', '.removeRow', function () {
-                $(this).closest('.inputFormRow').remove();
-                updateMinusButtons();
+            // Event handler for removing a row
+            $(document).on('click', '.minusBtn', function() {
+                $(this).closest('.inputFormRow').remove(); // Remove the current row
+                updateButtons(); // Update buttons visibility
             });
+
+            updateButtons(); // Initial button setup
+
 
             // Get the CSRF token value from the meta tag in your HTML
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -748,26 +748,19 @@
                             // Remove the id attributes to avoid duplicates
                             $(newRow).find('input, select').removeAttr('id');
 
-                            // Add a minus button to remove the row
-                            var removeButton = $('<button>').addClass('btn btn-danger removeRow')
-                                .text('-')
-                                .click(function () {
-                                    $(this).closest('.inputFormRow').remove();
-                                });
-
-                            $(newRow).find('.col-md-12').append(removeButton);
                             // Append the newRow to the form
                             $(newRow).appendTo('#arrivalFormModal .modal-body #arrivalForm #step2');
 
-                            // If it's not the first item, show the remove button
-                            if (index !== 0) {
-                                $(newRow).find('.removeRow').show();
+                            // Remove the first row if it's a placeholder or if you do not need it
+                            if (index === 0) {
+                                $('.inputFormRow:first').remove();
                             }
 
-                            // Remove the first row if it's a placeholder or if you do not need it
-                            /*if (index !== 0) {
-                                $('.inputFormRow:first').remove();
-                            }*/
+                            // Remove the plus sign for other rows or change it to a minus sign
+                            if (index !== 0)  {
+                                var minusButton = $('<button type="button" class="btn btn-danger minusBtn">-</button>');
+                                $(newRow).find('.addRow').replaceWith(minusButton); // Remove plus sign for other rows
+                            }
                         });
 
                     },
