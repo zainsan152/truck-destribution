@@ -34,6 +34,12 @@
         overflow-y: scroll;
     }
 
+    #custom-excel-button{
+        background-color: transparent;
+        color: black;
+        border: none;
+    }
+
 </style>
 @vite(['resources/js/app.js'])
 @section('content')
@@ -162,6 +168,14 @@
     <script>
         var table = $('#arrivals-table').DataTable({
             responsive: true,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    title: 'Exported OT Arrivals' + ' ' + new Date(),
+                    text: '<i class="fas fa-file-export" id="custom-excel-button"></i> Exporter Table',
+                }
+            ]
         });
 
         $(document).ready(function () {
